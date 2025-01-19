@@ -4,6 +4,7 @@ namespace BernskioldMedia\LaravelPpt\Components;
 
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBackgroundColor;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithShape;
+use BernskioldMedia\LaravelPpt\Contracts\CustomizesShape;
 use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 use PhpOffice\PhpPresentation\Shape\Chart;
 use PhpOffice\PhpPresentation\Shape\Chart\Gridlines;
@@ -186,6 +187,10 @@ class ChartShape extends Component
 
         // Maybe show legend?
         $this->shape->getLegend()->setVisible($this->chartComponent->showLegend);
+
+        if ($this->chartComponent instanceof CustomizesShape) {
+            $this->chartComponent->shapeRender($this);
+        }
 
         return $this;
     }
