@@ -26,7 +26,7 @@ class Quote extends BaseSlide implements DynamicallyCreatable
         $quoteXOffset = $this->horizontalPadding + 100;
 
         // Add opening quotation mark styling to the quote
-        $formattedQuote = '"' . $this->quote . '"';
+        $formattedQuote = '"'.$this->quote.'"';
 
         // Render the quote centered vertically
         $quoteBox = TextBox::make($this, $formattedQuote)
@@ -41,7 +41,7 @@ class Quote extends BaseSlide implements DynamicallyCreatable
 
         // Render the attribution below the quote if provided
         if (! empty($this->attribution)) {
-            TextBox::make($this, '— ' . $this->attribution)
+            TextBox::make($this, '— '.$this->attribution)
                 ->size(20)
                 ->width($quoteWidth)
                 ->position($quoteXOffset, ($this->presentation->height / 2) + 50)

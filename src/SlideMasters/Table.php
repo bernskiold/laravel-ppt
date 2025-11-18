@@ -8,7 +8,6 @@ use BernskioldMedia\LaravelPpt\Components\Table\Table as TableComponent;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithSlideTitle;
 use BernskioldMedia\LaravelPpt\Contracts\DynamicallyCreatable;
 use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
-use PhpOffice\PhpPresentation\Style\Alignment;
 use PhpOffice\PhpPresentation\Style\Color;
 
 /**
