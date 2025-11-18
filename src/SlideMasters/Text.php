@@ -20,6 +20,8 @@ class Text extends BaseSlide implements DynamicallyCreatable
         TextBox::make($this, $this->text)
             ->paragraphStyle('body')
             ->width($this->width * 0.66)
+            ->alignTop()
+            ->alignLeft()
             ->centered()
             ->render();
     }
