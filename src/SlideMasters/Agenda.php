@@ -32,16 +32,28 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
 
     protected function render(): void
     {
+        // Render the title rotated 90 degrees on the left side
         if (! empty($this->slideTitle)) {
-            $titleBox = $this->renderTitle();
-            $yOffset = $titleBox->height + 75;
-        } else {
-            $yOffset = 75;
+            TextBox::make($this, $this->slideTitle)
+                ->bold()
+                ->rotate(90)
+                ->width(720)
+                ->height(200)
+                ->centerVertically()
+                ->x(-270)
+                ->size(100)
+                ->uppercase()
+                ->render();
         }
 
         if (empty($this->items)) {
             return;
         }
+
+        // Content area starts from the left with padding
+        $yOffset = 75;
+        $xOffset = $this->horizontalPadding + 50; // Extra padding for rotated title
+        $contentWidth = $this->presentation->width - $xOffset - $this->horizontalPadding;
 
         $box = null;
 
@@ -51,8 +63,8 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
                     ->paragraphStyle('bodyText')
                     ->size(24)
                     ->height($this->presentation->height - $yOffset - 75)
-                    ->width($this->presentation->width - (2 * $this->horizontalPadding))
-                    ->position($this->horizontalPadding, $yOffset)
+                    ->width($contentWidth)
+                    ->position($xOffset, $yOffset)
                     ->alignLeft()
                     ->alignTop()
                     ->render()
