@@ -36,11 +36,11 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
         if (! empty($this->slideTitle)) {
             TextBox::make($this, $this->slideTitle)
                 ->bold()
-                ->rotate(270)
-                ->width($this->presentation->height - 2*$this->verticalPadding)
+                ->rotate(-90)
+                ->width($this->presentation->height - 2 * $this->verticalPadding)
                 ->height(200)
+                ->x(-230)
                 ->centerVertically()
-                ->x($this->verticalPadding)
                 ->size(100)
                 ->uppercase()
                 ->render();
@@ -60,7 +60,7 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
         foreach ($this->items as $item) {
             if (! $box) {
                 $box = TextBox::make($this, $item)
-                    ->paragraphStyle('bodyText')
+                    ->paragraphStyle('tocPoint')
                     ->size(24)
                     ->height($this->presentation->height - $yOffset - 75)
                     ->width($contentWidth)

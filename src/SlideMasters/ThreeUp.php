@@ -59,6 +59,7 @@ class ThreeUp extends BaseSlide implements DynamicallyCreatable
             ->alignLeft()
             ->alignTop()
             ->width($boxWidth)
+            ->height(400)
             ->position($xOffset, $yOffset + $title->height + 5)
             ->render();
     }

@@ -52,7 +52,7 @@ class Table extends BaseSlide implements DynamicallyCreatable
                 ->bold()
                 ->backgroundColor(Color::COLOR_DARKBLUE)
                 ->color(Color::COLOR_WHITE)
-                ->alignCenter()
+                ->alignLeft()
                 ->alignMiddle();
         }
 

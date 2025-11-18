@@ -60,6 +60,7 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
             ->alignLeft()
             ->alignTop()
             ->width($boxWidth)
+            ->height($boxHeight - $title->height - 10)
             ->position($xOffset, $yOffset + $title->height + 5)
             ->render();
     }
