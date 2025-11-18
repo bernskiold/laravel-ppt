@@ -113,7 +113,7 @@ class SlideMasters
     /**
      * Get available slide master keys.
      *
-     * @return array<string>  Array of master keys (e.g., ['title', 'title-subtitle', ...])
+     * @return array<string> Array of master keys (e.g., ['title', 'title-subtitle', ...])
      */
     public static function names(): array
     {
