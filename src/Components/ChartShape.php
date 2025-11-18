@@ -4,7 +4,9 @@ namespace BernskioldMedia\LaravelPpt\Components;
 
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBackgroundColor;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithShape;
+use BernskioldMedia\LaravelPpt\Contracts\CustomizesShape;
 use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
+use PhpOffice\PhpPresentation\Shape\Chart;
 use PhpOffice\PhpPresentation\Shape\Chart\Gridlines;
 use PhpOffice\PhpPresentation\Shape\Chart\Legend;
 use PhpOffice\PhpPresentation\Shape\Chart\Type\Line;
@@ -15,6 +17,8 @@ use PhpOffice\PhpPresentation\Style\Color;
 use PhpOffice\PhpPresentation\Style\Fill;
 
 /**
+ * @property Chart $shape
+ *
  * @method static static make(BaseSlide $slide, ChartComponent $chartComponent, ?string $axisColor = Color::COLOR_BLACK, ?string $title = '')
  */
 class ChartShape extends Component
@@ -72,7 +76,11 @@ class ChartShape extends Component
             $this->backgroundColor = $this->slide->chartBackgroundColor;
         }
 
-        if (! empty($this->backgroundColor)) {
+        if ($this->slide->chartAxisColor) {
+            $this->axisColor = $this->slide->chartAxisColor;
+        }
+
+        if (! empty($this->backgroundColor) && $this->backgroundColor !== 'transparent') {
             $this->shape->getFill()
                 ->setFillType(Fill::FILL_SOLID)
                 ->setStartColor(new Color($this->backgroundColor));
@@ -97,13 +105,36 @@ class ChartShape extends Component
         $this->shape->getPlotArea()->getAxisX()->getFont()->setName($this->slide->presentation->branding->baseFont())->setBold(true);
 
         if ($this->axisColor) {
-            $this->shape->getPlotArea()->getAxisY()->getFont()->setColor(new Color($this->axisColor));
-            $this->shape->getPlotArea()->getAxisX()->getFont()->setColor(new Color($this->axisColor));
+            $this->shape->getPlotArea()
+                ->getAxisY()
+                ->getFont()
+                ->setColor(new Color($this->axisColor))
+                ->setName($this->slide->presentation->branding->baseFont());
+
+            $this->shape->getPlotArea()
+                ->getAxisY()
+                ->getTickLabelFont()
+                ->setColor(new Color($this->axisColor))
+                ->setName($this->slide->presentation->branding->baseFont());
+
+            $this->shape->getPlotArea()
+                ->getAxisX()
+                ->getFont()
+                ->setColor(new Color($this->axisColor))
+                ->setName($this->slide->presentation->branding->baseFont());
+
+            $this->shape->getPlotArea()
+                ->getAxisX()
+                ->getTickLabelFont()
+                ->setColor(new Color($this->axisColor))
+                ->setName($this->slide->presentation->branding->baseFont());
         }
 
         // Place legends on top.
-        $this->shape->getLegend()->setPosition(Legend::POSITION_TOP);
+        $this->shape->getLegend()->setPosition(Legend::POSITION_BOTTOM);
         $this->shape->getLegend()->getBorder()->setLineStyle(Border::LINE_NONE);
+        $this->shape->getLegend()->getFont()->setName($this->slide->presentation->branding->baseFont());
+        $this->shape->getLegend()->getFont()->setColor(new Color($this->axisColor));
 
         // Add the chart to the area.
         $this->shape->getPlotArea()->setType($this->chartComponent->chart);
@@ -113,13 +144,15 @@ class ChartShape extends Component
             ->getAxisX()
             ->setTitle(strtoupper($this->chartComponent->xAxisTitle))
             ->getFont()
-            ->setCharacterSpacing(5);
+            ->setCharacterSpacing(5)
+            ->setName($this->slide->presentation->branding->baseFont());
 
         $this->shape->getPlotArea()
             ->getAxisY()
             ->setTitle(strtoupper($this->chartComponent->yAxisTitle))
             ->getFont()
-            ->setCharacterSpacing(5);
+            ->setCharacterSpacing(5)
+            ->setName($this->slide->presentation->branding->baseFont());
 
         // Maybe show axes?
         $this->shape->getPlotArea()->getAxisX()->setIsVisible($this->chartComponent->showXAxis);
@@ -137,7 +170,7 @@ class ChartShape extends Component
         }
 
         if ($this->chartComponent->chart instanceof Radar) {
-            $oGridlines = new Gridlines();
+            $oGridlines = new Gridlines;
             $oGridlines->getOutline()
                 ->setWidth(1)
                 ->getFill()
@@ -154,6 +187,10 @@ class ChartShape extends Component
 
         // Maybe show legend?
         $this->shape->getLegend()->setVisible($this->chartComponent->showLegend);
+
+        if ($this->chartComponent instanceof CustomizesShape) {
+            $this->chartComponent->shapeRender($this);
+        }
 
         return $this;
     }

@@ -21,8 +21,7 @@ class ParagraphStyle implements Arrayable
 
     public function __construct(
         public string $key
-    ) {
-    }
+    ) {}
 
     public function toArray()
     {

@@ -18,8 +18,7 @@ class BulletPoints extends BaseSlide
     public function __construct(
         string $title,
         protected array $bulletPoints = [],
-    ) {
-    }
+    ) {}
 
     public function bullet(string $text): self
     {

@@ -19,7 +19,7 @@ class Bar extends ChartComponent
 
     protected function initializeChart(): void
     {
-        $this->chart = new \PhpOffice\PhpPresentation\Shape\Chart\Type\Bar();
+        $this->chart = new \PhpOffice\PhpPresentation\Shape\Chart\Type\Bar;
     }
 
     public function stacked(bool $stacked = true): static

@@ -33,8 +33,7 @@ class TextBox extends Component
 
     public function __construct(
         protected ?string $text = '',
-    ) {
-    }
+    ) {}
 
     protected function initialize(): static
     {

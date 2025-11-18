@@ -17,7 +17,7 @@ class Radar extends ChartComponent
 
     protected function initializeChart(): void
     {
-        $this->chart = new \PhpOffice\PhpPresentation\Shape\Chart\Type\Radar();
+        $this->chart = new \PhpOffice\PhpPresentation\Shape\Chart\Type\Radar;
         $this->withoutDataValues();
     }
 

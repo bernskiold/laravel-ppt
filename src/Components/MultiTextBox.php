@@ -28,8 +28,7 @@ class MultiTextBox extends Component
 
     public function __construct(
         protected ?array $texts = []
-    ) {
-    }
+    ) {}
 
     protected function initialize(): static
     {

@@ -70,7 +70,7 @@ trait WithBorders
 
     public function getBordersObject(): Borders
     {
-        $borders = new Borders();
+        $borders = new Borders;
 
         $borders->getTop()
             ->setLineWidth($this->topBorderSize)

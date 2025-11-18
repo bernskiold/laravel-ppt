@@ -23,7 +23,7 @@ class Line extends ChartComponent
 
     protected function initializeChart(): void
     {
-        $this->chart = new \PhpOffice\PhpPresentation\Shape\Chart\Type\Line();
+        $this->chart = new \PhpOffice\PhpPresentation\Shape\Chart\Type\Line;
         $this->withoutDataValues();
     }
 
@@ -31,12 +31,7 @@ class Line extends ChartComponent
     {
         $seriesColor = $this->getSeriesColorFromData($seriesData, $index);
 
-        $series->getFont()
-            ->setName($this->slide->presentation->branding->baseFont())
-            ->setColor($seriesColor)
-            ->setBold(true);
-
-        $outline = (new Outline());
+        $outline = (new Outline);
         $outline->setWidth(2);
         $outline->getFill()
             ->setStartColor($seriesColor)
@@ -51,8 +46,7 @@ class Line extends ChartComponent
 
             $series->getMarker()
                 ->getBorder()
-                ->getColor()
-                ->setARGB('ffffffff');
+                ->setLineWidth(0);
 
             $series->getMarker()
                 ->getFill()

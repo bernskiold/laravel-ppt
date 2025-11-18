@@ -15,8 +15,7 @@ class ChartText extends BaseSlide
     public function __construct(
         protected string $text,
         protected ChartComponent $chart,
-    ) {
-    }
+    ) {}
 
     protected function render(): void
     {

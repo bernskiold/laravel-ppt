@@ -40,7 +40,7 @@ trait WithUrl
         }
 
         if ($this->slideNumberAnchor) {
-            return (new Hyperlink())->setSlideNumber($this->slideNumberAnchor)->setIsTextColorUsed($this->useTextColorForLink);
+            return (new Hyperlink)->setSlideNumber($this->slideNumberAnchor)->setIsTextColorUsed($this->useTextColorForLink);
         }
 
         return null;

@@ -18,8 +18,7 @@ class TextPart implements GeneratesTextRun
 
     public function __construct(
         protected string $text = ''
-    ) {
-    }
+    ) {}
 
     public function toTextRun(Component $component): Run
     {
