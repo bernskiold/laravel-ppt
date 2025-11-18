@@ -39,27 +39,25 @@ class SlideMasters
     /**
      * Package's built-in slide masters.
      *
+     * Populated by the service provider during boot.
      * These are automatically available to all applications using the package.
      *
      * @var array<class-string>
      */
-    protected static array $packageMasters = [
-        Blank::class,
-        BlankWithTitle::class,
-        BlankWithTitleSubtitle::class,
-        BulletPoints::class,
-        Chart::class,
-        ChartSquare::class,
-        ChartText::class,
-        ChartTitle::class,
-        ChartTitles::class,
-        FourUp::class,
-        SixUp::class,
-        Text::class,
-        Title::class,
-        TitleSubtitle::class,
-        TwoUp::class,
-    ];
+    protected static array $packageMasters = [];
+
+    /**
+     * Register package slide masters (called by service provider).
+     *
+     * @param  array<class-string>  $masters  Array of slide master class names
+     */
+    public static function registerPackage(array $masters): void
+    {
+        static::$packageMasters = array_merge(
+            static::$packageMasters,
+            $masters
+        );
+    }
 
     /**
      * Get all registered slide masters with their metadata.
@@ -188,10 +186,11 @@ class SlideMasters
     }
 
     /**
-     * Clear all registered application masters (primarily for testing).
+     * Clear all registered masters (primarily for testing).
      */
     public static function clear(): void
     {
+        static::$packageMasters = [];
         static::$appMasters = [];
     }
 }

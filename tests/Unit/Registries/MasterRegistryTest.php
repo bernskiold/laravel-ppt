@@ -1,12 +1,44 @@
 <?php
 
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
+use BernskioldMedia\LaravelPpt\SlideMasters\Blank;
+use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitle;
+use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitleSubtitle;
+use BernskioldMedia\LaravelPpt\SlideMasters\BulletPoints;
+use BernskioldMedia\LaravelPpt\SlideMasters\Chart;
+use BernskioldMedia\LaravelPpt\SlideMasters\ChartSquare;
+use BernskioldMedia\LaravelPpt\SlideMasters\ChartText;
+use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitle;
+use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitles;
+use BernskioldMedia\LaravelPpt\SlideMasters\FourUp;
+use BernskioldMedia\LaravelPpt\SlideMasters\SixUp;
 use BernskioldMedia\LaravelPpt\SlideMasters\Text;
 use BernskioldMedia\LaravelPpt\SlideMasters\Title;
+use BernskioldMedia\LaravelPpt\SlideMasters\TitleSubtitle;
+use BernskioldMedia\LaravelPpt\SlideMasters\TwoUp;
 
 beforeEach(function () {
-    // Clear any registered application masters before each test
+    // Clear and re-register package masters before each test
     SlideMasters::clear();
+
+    // Register package's built-in slide masters (simulating service provider)
+    SlideMasters::registerPackage([
+        Blank::class,
+        BlankWithTitle::class,
+        BlankWithTitleSubtitle::class,
+        BulletPoints::class,
+        Chart::class,
+        ChartSquare::class,
+        ChartText::class,
+        ChartTitle::class,
+        ChartTitles::class,
+        FourUp::class,
+        SixUp::class,
+        Text::class,
+        Title::class,
+        TitleSubtitle::class,
+        TwoUp::class,
+    ]);
 });
 
 it('includes package slide masters by default', function () {

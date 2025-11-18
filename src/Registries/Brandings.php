@@ -17,12 +17,26 @@ class Brandings
     /**
      * Package's built-in brandings.
      *
+     * Populated by the service provider during boot.
      * Currently empty - the package provides no default brandings.
      * Applications are expected to provide their own branding implementations.
      *
      * @var array<string, class-string>
      */
     protected static array $packageBrandings = [];
+
+    /**
+     * Register package brandings (called by service provider).
+     *
+     * @param  array<string, class-string>  $brandings  Map of names to class names
+     */
+    public static function registerPackage(array $brandings): void
+    {
+        static::$packageBrandings = array_merge(
+            static::$packageBrandings,
+            $brandings
+        );
+    }
 
     /**
      * Get all registered brandings (package + app combined).
@@ -90,6 +104,7 @@ class Brandings
      */
     public static function clear(): void
     {
+        static::$packageBrandings = [];
         static::$appBrandings = [];
     }
 }
