@@ -73,6 +73,20 @@ class Brandings
     }
 
     /**
+     * Unregister one or more brandings by name.
+     *
+     * Brandings::unregister(['MyBrand', 'AnotherBrand']);
+     *
+     * @param  array<string>  $names  Array of branding names to remove
+     */
+    public static function unregister(array $names): void
+    {
+        foreach ($names as $name) {
+            unset(static::$brandings[$name]);
+        }
+    }
+
+    /**
      * Clear all registered brandings (primarily for testing).
      */
     public static function clear(): void

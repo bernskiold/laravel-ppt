@@ -85,3 +85,42 @@ it('overwrites branding with same name', function () {
 
     expect(Brandings::getClass('Brand'))->toBe($newClass);
 });
+
+it('can unregister a single branding', function () {
+    Brandings::register([
+        'Brand1' => Branding::class,
+        'Brand2' => Branding::class,
+    ]);
+
+    expect(Brandings::exists('Brand1'))->toBeTrue();
+
+    Brandings::unregister(['Brand1']);
+
+    expect(Brandings::exists('Brand1'))->toBeFalse();
+    expect(Brandings::exists('Brand2'))->toBeTrue();
+});
+
+it('can unregister multiple brandings', function () {
+    Brandings::register([
+        'Brand1' => Branding::class,
+        'Brand2' => Branding::class,
+        'Brand3' => Branding::class,
+    ]);
+
+    Brandings::unregister(['Brand1', 'Brand3']);
+
+    expect(Brandings::exists('Brand1'))->toBeFalse();
+    expect(Brandings::exists('Brand2'))->toBeTrue();
+    expect(Brandings::exists('Brand3'))->toBeFalse();
+});
+
+it('unregister handles non-existent brandings gracefully', function () {
+    Brandings::register([
+        'Brand1' => Branding::class,
+    ]);
+
+    Brandings::unregister(['NonExistent', 'Brand1']);
+
+    expect(Brandings::exists('Brand1'))->toBeFalse();
+    expect(Brandings::all())->toBeEmpty();
+});

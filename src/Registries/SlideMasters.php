@@ -129,6 +129,37 @@ class SlideMasters
     }
 
     /**
+     * Unregister one or more slide masters.
+     *
+     * Accepts either master names (e.g., 'Title') or full class names.
+     *
+     * SlideMasters::unregister(['Title', CustomMaster::class]);
+     *
+     * @param  array<string>  $names  Array of master names or class names to remove
+     */
+    public static function unregister(array $names): void
+    {
+        foreach ($names as $name) {
+            // If it contains a backslash, treat it as a class name
+            if (str_contains($name, '\\')) {
+                static::$masters = array_filter(
+                    static::$masters,
+                    fn ($class) => $class !== $name
+                );
+            } else {
+                // Otherwise, treat it as a master name (basename)
+                static::$masters = array_filter(
+                    static::$masters,
+                    fn ($class) => class_basename($class) !== $name
+                );
+            }
+        }
+
+        // Re-index the array to maintain sequential numeric keys
+        static::$masters = array_values(static::$masters);
+    }
+
+    /**
      * Get all registered master classes (raw list without metadata).
      *
      * @return array<class-string>
