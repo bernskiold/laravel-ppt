@@ -2,22 +2,6 @@
 
 namespace BernskioldMedia\LaravelPpt\Registries;
 
-use BernskioldMedia\LaravelPpt\SlideMasters\Blank;
-use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitleSubtitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\BulletPoints;
-use BernskioldMedia\LaravelPpt\SlideMasters\Chart;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartSquare;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartText;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitles;
-use BernskioldMedia\LaravelPpt\SlideMasters\FourUp;
-use BernskioldMedia\LaravelPpt\SlideMasters\SixUp;
-use BernskioldMedia\LaravelPpt\SlideMasters\Text;
-use BernskioldMedia\LaravelPpt\SlideMasters\Title;
-use BernskioldMedia\LaravelPpt\SlideMasters\TitleSubtitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\TwoUp;
-
 use function class_basename;
 use function collect;
 use function interface_exists;
