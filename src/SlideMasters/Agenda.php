@@ -36,11 +36,11 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
         if (! empty($this->slideTitle)) {
             TextBox::make($this, $this->slideTitle)
                 ->bold()
-                ->rotate(90)
-                ->width(720)
+                ->rotate(270)
+                ->width($this->presentation->height - 2*$this->verticalPadding)
                 ->height(200)
                 ->centerVertically()
-                ->x(-270)
+                ->x($this->verticalPadding)
                 ->size(100)
                 ->uppercase()
                 ->render();
@@ -52,7 +52,7 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
 
         // Content area starts from the left with padding
         $yOffset = 75;
-        $xOffset = $this->horizontalPadding + 50; // Extra padding for rotated title
+        $xOffset = $this->horizontalPadding + 150; // Extra padding for rotated title
         $contentWidth = $this->presentation->width - $xOffset - $this->horizontalPadding;
 
         $box = null;

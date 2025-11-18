@@ -14,6 +14,7 @@ use BernskioldMedia\LaravelPpt\SlideMasters\BulletPoints;
 use BernskioldMedia\LaravelPpt\SlideMasters\Chart;
 use BernskioldMedia\LaravelPpt\SlideMasters\ChartSquare;
 use BernskioldMedia\LaravelPpt\SlideMasters\ChartText;
+use BernskioldMedia\LaravelPpt\SlideMasters\ChartTextTitle;
 use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitle;
 use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitles;
 use BernskioldMedia\LaravelPpt\SlideMasters\FourUp;
@@ -55,6 +56,7 @@ class LaravelPptServiceProvider extends PackageServiceProvider
             BulletPoints::class,
             Chart::class,
             ChartSquare::class,
+            ChartTextTitle::class,
             ChartText::class,
             ChartTitle::class,
             ChartTitles::class,
