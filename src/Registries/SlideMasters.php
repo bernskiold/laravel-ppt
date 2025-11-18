@@ -2,7 +2,6 @@
 
 namespace BernskioldMedia\LaravelPpt\Registries;
 
-use function class_basename;
 use function collect;
 use function interface_exists;
 use function is_subclass_of;
