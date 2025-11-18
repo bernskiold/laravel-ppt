@@ -21,7 +21,6 @@ class PresentationFactory
      * @param  array  $slides  Array of slide configurations, each with 'master' (name or FQCN) and 'data' keys
      * @param  int|null  $width  Presentation width in pixels
      * @param  int|null  $height  Presentation height in pixels
-     * @return Presentation
      *
      * @throws InvalidArgumentException
      */
@@ -126,12 +125,9 @@ class PresentationFactory
     /**
      * Create and save a presentation in one step.
      *
-     * @param  string  $title
      * @param  string  $branding  Branding name from BrandingRegistry or fully qualified class name
-     * @param  array  $slides
      * @param  array  $presentationOptions  Optional: width, height
      * @param  array  $saveOptions  Optional: filename, disk, directory, inRootFolder
-     * @return array
      */
     public static function createAndSave(
         string $title,
@@ -160,10 +156,8 @@ class PresentationFactory
     /**
      * Add a slide to the presentation using SlideFactory.
      *
-     * @param  Presentation  $presentation
      * @param  array  $slideConfig  Must contain 'master' (name or FQCN) and 'data' (array) keys
      * @param  int  $index  Slide index for error messages
-     * @return void
      *
      * @throws InvalidArgumentException
      */
@@ -242,7 +236,7 @@ class PresentationFactory
     public static function generateSignedUrl(
         string $disk,
         string $path,
-        \DateTimeInterface|int $expiration = null
+        \DateTimeInterface|int|null $expiration = null
     ): string {
         $expiration = $expiration ?? now()->addDay();
 

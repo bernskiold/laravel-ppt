@@ -49,9 +49,6 @@ class BrandingRegistry
 
     /**
      * Check if a branding exists.
-     *
-     * @param  string  $name
-     * @return bool
      */
     public static function exists(string $name): bool
     {
@@ -61,7 +58,6 @@ class BrandingRegistry
     /**
      * Get the class name for a branding.
      *
-     * @param  string  $name
      * @return class-string|null
      */
     public static function getClass(string $name): ?string
@@ -80,7 +76,6 @@ class BrandingRegistry
      * ]);
      *
      * @param  array<string, class-string>  $brandings  Map of names to class names
-     * @return void
      */
     public static function register(array $brandings): void
     {
@@ -92,8 +87,6 @@ class BrandingRegistry
 
     /**
      * Clear all registered brandings (primarily for testing).
-     *
-     * @return void
      */
     public static function clear(): void
     {

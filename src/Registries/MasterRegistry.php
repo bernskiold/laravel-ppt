@@ -95,7 +95,6 @@ class MasterRegistry
      * Build master definition array with metadata.
      *
      * @param  class-string  $class
-     * @return array
      */
     protected static function buildMasterDefinition(string $class): array
     {
@@ -119,9 +118,6 @@ class MasterRegistry
 
     /**
      * Get a specific slide master definition.
-     *
-     * @param  string  $masterName
-     * @return array|null
      */
     public static function get(string $masterName): ?array
     {
@@ -130,9 +126,6 @@ class MasterRegistry
 
     /**
      * Check if a slide master exists.
-     *
-     * @param  string  $masterName
-     * @return bool
      */
     public static function exists(string $masterName): bool
     {
@@ -142,7 +135,6 @@ class MasterRegistry
     /**
      * Get the class name for a slide master.
      *
-     * @param  string  $masterName
      * @return class-string|null
      */
     public static function getClass(string $masterName): ?string
@@ -173,7 +165,6 @@ class MasterRegistry
      * ]);
      *
      * @param  array<class-string>  $masters  Array of slide master class names
-     * @return void
      */
     public static function register(array $masters): void
     {
@@ -198,8 +189,6 @@ class MasterRegistry
 
     /**
      * Clear all registered application masters (primarily for testing).
-     *
-     * @return void
      */
     public static function clear(): void
     {

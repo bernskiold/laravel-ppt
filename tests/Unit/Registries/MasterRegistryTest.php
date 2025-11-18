@@ -1,9 +1,8 @@
 <?php
 
 use BernskioldMedia\LaravelPpt\Registries\MasterRegistry;
-use BernskioldMedia\LaravelPpt\SlideMasters\Title;
 use BernskioldMedia\LaravelPpt\SlideMasters\Text;
-use BernskioldMedia\LaravelPpt\SlideMasters\Chart;
+use BernskioldMedia\LaravelPpt\SlideMasters\Title;
 
 beforeEach(function () {
     // Clear any registered application masters before each test
