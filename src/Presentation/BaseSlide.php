@@ -262,6 +262,10 @@ abstract class BaseSlide implements SlideContract
      */
     public static function label(): string
     {
-        return Str::title(Str::snake(class_basename(static::class), ' '));
+        return str(static::class)
+            ->classBasename()
+            ->snake(' ')
+            ->title()
+            ->toString();
     }
 }

@@ -53,6 +53,10 @@ class SlideMasters
     {
         $definition = ['class' => $class];
 
+        if(method_exists($class, 'label')) {
+            $definition['label'] = $class::label();
+        }
+
         // Add schema info if available (from DynamicallyCreatable interface)
         if (method_exists($class, 'description')) {
             $definition['description'] = $class::description();
