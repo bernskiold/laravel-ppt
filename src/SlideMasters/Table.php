@@ -8,7 +8,6 @@ use BernskioldMedia\LaravelPpt\Components\Table\Table as TableComponent;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithSlideTitle;
 use BernskioldMedia\LaravelPpt\Contracts\DynamicallyCreatable;
 use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
-use PhpOffice\PhpPresentation\Style\Color;
 
 /**
  * @method static static make(string $title = '', array $headers = [], array $data = [])
@@ -70,7 +69,7 @@ class Table extends BaseSlide implements DynamicallyCreatable
                     ->alignLeft()
                     ->alignMiddle();
 
-                if($rowIndex === 1) {
+                if ($rowIndex === 1) {
                     $cell->borderTop($this->presentation->branding->slideTheme(static::class)->textColor ?? 'ff000000', 2);
                 }
 
