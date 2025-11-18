@@ -18,7 +18,6 @@ class SlideFactory
      *
      * @param  class-string<BaseSlide&DynamicallyCreatable>  $slideClass
      * @param  array  $data  Associative array of data matching constructor parameters
-     * @return BaseSlide
      *
      * @throws InvalidArgumentException
      */

@@ -16,8 +16,6 @@ interface DynamicallyCreatable
 
     /**
      * Get a human-readable description of this slide master.
-     *
-     * @return string
      */
     public static function description(): string;
 
@@ -25,8 +23,6 @@ interface DynamicallyCreatable
      * Get an example data structure for this slide master.
      *
      * This should be a valid data array that could be passed to SlideFactory::create()
-     *
-     * @return array
      */
     public static function exampleData(): array;
 }
