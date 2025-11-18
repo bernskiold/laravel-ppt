@@ -4,6 +4,7 @@ namespace BernskioldMedia\LaravelPpt;
 
 use BernskioldMedia\LaravelPpt\Commands\CreateNewSlideCommand;
 use BernskioldMedia\LaravelPpt\Commands\CreateNewSlideDeckCommand;
+use BernskioldMedia\LaravelPpt\Commands\GenerateSamplePresentationCommand;
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
 use BernskioldMedia\LaravelPpt\SlideMasters\Blank;
 use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitle;
@@ -33,6 +34,7 @@ class LaravelPptServiceProvider extends PackageServiceProvider
             ->hasConsoleCommands([
                 CreateNewSlideDeckCommand::class,
                 CreateNewSlideCommand::class,
+                GenerateSamplePresentationCommand::class,
             ]);
     }
 
