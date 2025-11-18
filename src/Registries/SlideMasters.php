@@ -24,7 +24,7 @@ use function interface_exists;
 use function is_subclass_of;
 use function method_exists;
 
-class MasterRegistry
+class SlideMasters
 {
     /**
      * Application-registered slide masters via service provider.

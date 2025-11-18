@@ -2,7 +2,7 @@
 
 namespace BernskioldMedia\LaravelPpt\Registries;
 
-class BrandingRegistry
+class Brandings
 {
     /**
      * Application-registered brandings via service provider.

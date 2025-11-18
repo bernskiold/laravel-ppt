@@ -2,19 +2,19 @@
 
 use BernskioldMedia\LaravelPpt\Branding\Branding;
 use BernskioldMedia\LaravelPpt\Presentation\Presentation;
-use BernskioldMedia\LaravelPpt\Registries\BrandingRegistry;
-use BernskioldMedia\LaravelPpt\Registries\MasterRegistry;
+use BernskioldMedia\LaravelPpt\Registries\Brandings;
+use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
 use BernskioldMedia\LaravelPpt\SlideMasters\Title;
 use BernskioldMedia\LaravelPpt\Support\PresentationFactory;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     // Clear registries before each test
-    BrandingRegistry::clear();
-    MasterRegistry::clear();
+    Brandings::clear();
+    SlideMasters::clear();
 
     // Register a test branding
-    BrandingRegistry::register([
+    Brandings::register([
         'TestBrand' => Branding::class,
     ]);
 });

@@ -5,8 +5,8 @@ namespace BernskioldMedia\LaravelPpt\Support;
 use BernskioldMedia\LaravelPpt\Branding\Branding;
 use BernskioldMedia\LaravelPpt\Contracts\DynamicallyCreatable;
 use BernskioldMedia\LaravelPpt\Presentation\Presentation;
-use BernskioldMedia\LaravelPpt\Registries\BrandingRegistry;
-use BernskioldMedia\LaravelPpt\Registries\MasterRegistry;
+use BernskioldMedia\LaravelPpt\Registries\Brandings;
+use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -61,15 +61,15 @@ class PresentationFactory
     protected static function resolveBranding(string $branding): string
     {
         // Try to resolve from registry first
-        if (BrandingRegistry::exists($branding)) {
-            return BrandingRegistry::getClass($branding);
+        if (Brandings::exists($branding)) {
+            return Brandings::getClass($branding);
         }
 
         // Treat as fully qualified class name
         if (! class_exists($branding)) {
             throw new InvalidArgumentException(
                 "Branding '{$branding}' not found in registry and class does not exist. ".
-                'Available brandings: '.implode(', ', BrandingRegistry::names())
+                'Available brandings: '.implode(', ', Brandings::names())
             );
         }
 
@@ -201,15 +201,15 @@ class PresentationFactory
     protected static function resolveMaster(string $master, int $index): string
     {
         // Try to resolve from registry first
-        if (MasterRegistry::exists($master)) {
-            return MasterRegistry::getClass($master);
+        if (SlideMasters::exists($master)) {
+            return SlideMasters::getClass($master);
         }
 
         // Treat as fully qualified class name
         if (! class_exists($master)) {
             throw new InvalidArgumentException(
                 "Slide master '{$master}' at index {$index} not found in registry and class does not exist. ".
-                'Available masters: '.implode(', ', MasterRegistry::names())
+                'Available masters: '.implode(', ', SlideMasters::names())
             );
         }
 

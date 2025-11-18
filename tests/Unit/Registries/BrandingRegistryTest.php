@@ -1,87 +1,87 @@
 <?php
 
 use BernskioldMedia\LaravelPpt\Branding\Branding;
-use BernskioldMedia\LaravelPpt\Registries\BrandingRegistry;
+use BernskioldMedia\LaravelPpt\Registries\Brandings;
 
 beforeEach(function () {
     // Clear any registered brandings before each test
-    BrandingRegistry::clear();
+    Brandings::clear();
 });
 
 it('returns empty array by default', function () {
-    expect(BrandingRegistry::all())->toBeEmpty();
+    expect(Brandings::all())->toBeEmpty();
 });
 
 it('returns empty names array by default', function () {
-    expect(BrandingRegistry::names())->toBeEmpty();
+    expect(Brandings::names())->toBeEmpty();
 });
 
 it('can register a single branding', function () {
-    BrandingRegistry::register([
+    Brandings::register([
         'TestBrand' => Branding::class,
     ]);
 
-    expect(BrandingRegistry::all())->toHaveKey('TestBrand');
-    expect(BrandingRegistry::getClass('TestBrand'))->toBe(Branding::class);
+    expect(Brandings::all())->toHaveKey('TestBrand');
+    expect(Brandings::getClass('TestBrand'))->toBe(Branding::class);
 });
 
 it('can register multiple brandings', function () {
-    BrandingRegistry::register([
+    Brandings::register([
         'Brand1' => Branding::class,
         'Brand2' => Branding::class,
     ]);
 
-    expect(BrandingRegistry::names())->toContain('Brand1', 'Brand2');
+    expect(Brandings::names())->toContain('Brand1', 'Brand2');
 });
 
 it('checks if a branding exists', function () {
-    BrandingRegistry::register([
+    Brandings::register([
         'ExistingBrand' => Branding::class,
     ]);
 
-    expect(BrandingRegistry::exists('ExistingBrand'))->toBeTrue();
-    expect(BrandingRegistry::exists('NonExistentBrand'))->toBeFalse();
+    expect(Brandings::exists('ExistingBrand'))->toBeTrue();
+    expect(Brandings::exists('NonExistentBrand'))->toBeFalse();
 });
 
 it('returns null for non-existent branding class', function () {
-    expect(BrandingRegistry::getClass('NonExistent'))->toBeNull();
+    expect(Brandings::getClass('NonExistent'))->toBeNull();
 });
 
 it('can clear all registered brandings', function () {
-    BrandingRegistry::register([
+    Brandings::register([
         'TestBrand' => Branding::class,
     ]);
 
-    expect(BrandingRegistry::all())->not->toBeEmpty();
+    expect(Brandings::all())->not->toBeEmpty();
 
-    BrandingRegistry::clear();
+    Brandings::clear();
 
-    expect(BrandingRegistry::all())->toBeEmpty();
+    expect(Brandings::all())->toBeEmpty();
 });
 
 it('merges multiple registrations', function () {
-    BrandingRegistry::register([
+    Brandings::register([
         'Brand1' => Branding::class,
     ]);
 
-    BrandingRegistry::register([
+    Brandings::register([
         'Brand2' => Branding::class,
     ]);
 
-    expect(BrandingRegistry::names())->toContain('Brand1', 'Brand2');
+    expect(Brandings::names())->toContain('Brand1', 'Brand2');
 });
 
 it('overwrites branding with same name', function () {
     $originalClass = Branding::class;
     $newClass = Branding::class;
 
-    BrandingRegistry::register([
+    Brandings::register([
         'Brand' => $originalClass,
     ]);
 
-    BrandingRegistry::register([
+    Brandings::register([
         'Brand' => $newClass,
     ]);
 
-    expect(BrandingRegistry::getClass('Brand'))->toBe($newClass);
+    expect(Brandings::getClass('Brand'))->toBe($newClass);
 });
