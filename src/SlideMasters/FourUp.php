@@ -18,16 +18,15 @@ class FourUp extends BaseSlide implements DynamicallyCreatable
 
     public function __construct(
         string $title = '',
-        array  $boxes = [],
-    )
-    {
+        array $boxes = [],
+    ) {
         $this->slideTitle = $title;
         $this->boxes = $boxes;
     }
 
     protected function render(): void
     {
-        if (!empty($this->slideTitle)) {
+        if (! empty($this->slideTitle)) {
             $this->renderTitle();
         }
 
@@ -39,12 +38,12 @@ class FourUp extends BaseSlide implements DynamicallyCreatable
 
     protected function makeBoxes(int $index, int $column = 1): void
     {
-        if (!isset($this->boxes[$index - 1])) {
+        if (! isset($this->boxes[$index - 1])) {
             return;
         }
 
         $columnGap = 20;
-        $boxWidth = (int)(($this->presentation->width - (2 * $this->horizontalPadding) - ($columnGap * 3)) / 4);
+        $boxWidth = (int) (($this->presentation->width - (2 * $this->horizontalPadding) - ($columnGap * 3)) / 4);
         $yOffset = 150;
         $xOffset = $this->horizontalPadding + (($column - 1) * ($boxWidth + $columnGap));
 
