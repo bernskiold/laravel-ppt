@@ -13,8 +13,7 @@ class TitleSubtitle extends BaseSlide
     public function __construct(
         public string $title,
         public string $subtitle,
-    ) {
-    }
+    ) {}
 
     protected function render(): void
     {

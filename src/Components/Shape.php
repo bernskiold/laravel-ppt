@@ -29,7 +29,7 @@ class Shape extends Component
 
     protected function initialize(): static
     {
-        $this->shape = new AutoShape();
+        $this->shape = new AutoShape;
 
         return $this;
     }
@@ -72,7 +72,7 @@ class Shape extends Component
 
         if ($this->backgroundColor) {
             $this->shape->setFill(
-                (new Fill())->setFillType(Fill::FILL_SOLID)
+                (new Fill)->setFillType(Fill::FILL_SOLID)
                     ->setStartColor(new Color($this->backgroundColor))
                     ->setEndColor(new Color($this->backgroundColor))
             );

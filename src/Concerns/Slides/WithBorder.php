@@ -44,10 +44,10 @@ trait WithBorder
 
     protected function getBorderAsOutline(): Outline
     {
-        return (new Outline())
+        return (new Outline)
             ->setWidth($this->borderSize)
             ->setFill(
-                (new Fill())->setFillType($this->borderType)
+                (new Fill)->setFillType($this->borderType)
                     ->setStartColor(new Color($this->borderColor))
                     ->setEndColor(new Color($this->borderColor))
             );

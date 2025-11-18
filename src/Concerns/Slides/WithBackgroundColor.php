@@ -18,7 +18,7 @@ trait WithBackgroundColor
 
     public function getBackgroundColorFill(): Fill
     {
-        return (new Fill())
+        return (new Fill)
             ->setFillType(Fill::FILL_SOLID)
             ->setStartColor(new Color($this->backgroundColor))
             ->setEndColor(new Color($this->backgroundColor));

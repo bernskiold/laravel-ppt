@@ -9,6 +9,7 @@ use ReflectionClass;
 
 use function array_merge;
 use function collect;
+use function config;
 
 class Branding
 {
@@ -44,10 +45,21 @@ class Branding
 
     public function __construct()
     {
-        $this->baseFont = config('powerpoint.baseBranding.font', 'Calibri');
-        $this->creatorCompanyName = config('powerpoint.baseBranding.creatorCompanyName', '');
-        $this->websiteUrl = config('powerpoint.baseBranding.websiteUrl', '#');
-        $this->defaultChartColors = config('powerpoint.baseBranding.chartColors', 'ff000000');
+        if (empty($this->baseFont)) {
+            $this->baseFont = config('powerpoint.baseBranding.font', 'Calibri');
+        }
+
+        if (empty($this->creatorCompanyName)) {
+            $this->creatorCompanyName = config('powerpoint.baseBranding.creatorCompanyName', '');
+        }
+
+        if (empty($this->websiteUrl)) {
+            $this->websiteUrl = config('powerpoint.baseBranding.websiteUrl', '#');
+        }
+
+        if (empty($this->chartColors)) {
+            $this->defaultChartColors = config('powerpoint.baseBranding.chartColors', 'ff000000');
+        }
     }
 
     /**

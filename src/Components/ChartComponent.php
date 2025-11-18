@@ -21,6 +21,9 @@ abstract class ChartComponent extends Component
         $this->initializeChart();
     }
 
+    /**
+     * @param  array  $data
+     */
     public static function make(...$args): static
     {
         return new static(...$args);

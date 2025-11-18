@@ -26,9 +26,12 @@ class ChartTitles extends BaseSlide
     {
         $title = $this->renderTitle();
 
+        $width = $this->chart->width ?? $this->presentation->width;
+        $height = $this->chart->height ?? $this->presentation->height;
+
         ChartShape::make($this, $this->chart->slide($this)->get())
-            ->height($this->presentation->height - $title->height - $this->verticalPadding * 2 - 20)
-            ->width($this->presentation->width - $this->horizontalPadding * 2)
+            ->height($height - $title->height - $this->verticalPadding * 2 - 20)
+            ->width($width - $this->horizontalPadding * 2)
             ->centerHorizontally()
             ->y($title->height + $this->verticalPadding + 20)
             ->backgroundColor($this->chartBackgroundColor)

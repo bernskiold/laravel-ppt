@@ -38,6 +38,10 @@ trait WithEdgeImages
 
     public function bottomLeftImage(string $path, int $width, int $height, ?int $x = null, ?int $y = null, ?string $url = null): self
     {
+        if ($this->bottomLeftImagePath) {
+            return $this;
+        }
+
         $this->bottomLeftImagePath = $path;
         $this->bottomLeftImageDimensions = ['width' => $width, 'height' => $height];
 
@@ -58,6 +62,10 @@ trait WithEdgeImages
 
     public function bottomRightImage(string $path, int $width, int $height, ?int $x = null, ?int $y = null, ?string $url = null): self
     {
+        if ($this->bottomRightImagePath) {
+            return $this;
+        }
+
         $this->bottomRightImagePath = $path;
         $this->bottomRightImageDimensions = ['width' => $width, 'height' => $height];
 
@@ -78,6 +86,10 @@ trait WithEdgeImages
 
     public function topLeftImage(string $path, int $width, int $height, ?int $x = null, ?int $y = null, ?string $url = null): self
     {
+        if ($this->topLeftImagePath) {
+            return $this;
+        }
+
         $this->topLeftImagePath = $path;
         $this->topLeftImageDimensions = ['width' => $width, 'height' => $height];
 
@@ -98,6 +110,10 @@ trait WithEdgeImages
 
     public function topRightImage(string $path, int $width, int $height, ?int $x = null, ?int $y = null, ?string $url = null): self
     {
+        if ($this->topRightImagePath) {
+            return $this;
+        }
+
         $this->topRightImagePath = $path;
         $this->topRightImageDimensions = ['width' => $width, 'height' => $height];
 

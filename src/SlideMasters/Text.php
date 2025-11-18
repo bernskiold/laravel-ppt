@@ -12,8 +12,7 @@ class Text extends BaseSlide
 {
     public function __construct(
         protected string $text
-    ) {
-    }
+    ) {}
 
     protected function render(): void
     {

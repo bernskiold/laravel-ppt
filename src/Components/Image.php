@@ -17,7 +17,9 @@ class Image extends Component
     public function __construct(
         protected string $path
     ) {
-        $this->shape = (new File())->setPath($path);
+        $this->shape = (new File)
+            ->setPath($path)
+            ->setName(str()->random());
     }
 
     public function render(): static

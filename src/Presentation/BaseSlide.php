@@ -133,7 +133,7 @@ abstract class BaseSlide implements SlideContract
     protected function applyBackgroundColor(): void
     {
         $color = (new \PhpOffice\PhpPresentation\Style\Color($this->backgroundColor));
-        $background = (new Color())->setColor($color);
+        $background = (new Color)->setColor($color);
 
         $this->slide->setBackground($background);
     }
@@ -144,7 +144,7 @@ abstract class BaseSlide implements SlideContract
             return;
         }
 
-        $background = (new Slide\Background\Image())->setPath($this->backgroundImage);
+        $background = (new Slide\Background\Image)->setPath($this->backgroundImage);
         $this->slide->setBackground($background);
     }
 
@@ -241,7 +241,8 @@ abstract class BaseSlide implements SlideContract
         $shape->setPath($imagePath)
             ->setWidthAndHeight($imageDimensions['width'], $imageDimensions['height'])
             ->setOffsetX($x)
-            ->setOffsetY($y);
+            ->setOffsetY($y)
+            ->setName(str()->random());
 
         if ($url) {
             $shape->getHyperlink()->setUrl($url);

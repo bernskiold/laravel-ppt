@@ -3,6 +3,9 @@
 namespace BernskioldMedia\LaravelPpt\Components\Table;
 
 use BernskioldMedia\LaravelPpt\Concerns\Makeable;
+use BernskioldMedia\LaravelPpt\Concerns\Slides\WithAlignment;
+use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBackgroundColor;
+use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBorders;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithFontSettings;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithUrl;
 
@@ -12,6 +15,9 @@ use BernskioldMedia\LaravelPpt\Concerns\Slides\WithUrl;
 class Cell
 {
     use Makeable,
+        WithAlignment,
+        WithBackgroundColor,
+        WithBorders,
         WithFontSettings,
         WithUrl;
 
@@ -23,8 +29,7 @@ class Cell
 
     public function __construct(
         public string $text = ''
-    ) {
-    }
+    ) {}
 
     public function spansColumns(int $colspan): self
     {

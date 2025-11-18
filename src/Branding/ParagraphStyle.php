@@ -21,8 +21,7 @@ class ParagraphStyle implements Arrayable
 
     public function __construct(
         public string $key
-    ) {
-    }
+    ) {}
 
     public function toArray()
     {
@@ -46,19 +45,19 @@ class ParagraphStyle implements Arrayable
      */
     public function applyToComponent(Component $component): void
     {
-        if ($this->size && method_exists($component, 'size')) {
+        if ($this->size && method_exists($component, 'size') && $component->size === null) {
             $component->size($this->size);
         }
 
-        if ($this->color && method_exists($component, 'color')) {
+        if ($this->color && method_exists($component, 'color') && $component->color === null) {
             $component->color($this->color);
         }
 
-        if ($this->letterSpacing && method_exists($component, 'letterSpacing')) {
+        if ($this->letterSpacing && method_exists($component, 'letterSpacing') && $component->letterSpacing === null) {
             $component->letterSpacing($this->letterSpacing);
         }
 
-        if ($this->font && method_exists($component, 'font')) {
+        if ($this->font && method_exists($component, 'font') && $component->font === null) {
             $component->font($this->font);
         }
 
@@ -66,11 +65,11 @@ class ParagraphStyle implements Arrayable
             $component->bold($this->bold);
         }
 
-        if ($this->underlined && method_exists($component, 'underlined')) {
+        if ($this->underlined && method_exists($component, 'underlined') && $component->underlined === null) {
             $component->underlined($this->underlined);
         }
 
-        if ($this->lineHeight && method_exists($component, 'lineHeight')) {
+        if ($this->lineHeight && method_exists($component, 'lineHeight') && $component->lineHeight === null) {
             $component->lineHeight($this->lineHeight);
         }
 
