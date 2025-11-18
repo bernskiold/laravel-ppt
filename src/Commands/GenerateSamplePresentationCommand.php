@@ -2,11 +2,15 @@
 
 namespace BernskioldMedia\LaravelPpt\Commands;
 
+use Bernskioldmedia\LaravelPpt\Enums\WriterType;
 use BernskioldMedia\LaravelPpt\Registries\Brandings;
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
 use BernskioldMedia\LaravelPpt\Support\PresentationFactory;
 use Illuminate\Console\Command;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpPresentation\IOFactory;
 use function base_path;
 use function class_exists;
 use function is_dir;
@@ -69,7 +73,9 @@ class GenerateSamplePresentationCommand extends Command
         }
 
         // Determine save directory and filename
-        $directory = $this->determineSaveDirectory();
+        $directory = storage_path('tmp');
+        File::ensureDirectoryExists($directory);
+
         $filename = 'sample-presentation-'.date('Y-m-d-His');
 
         $this->info('Generating presentation with '.count($slides).' slides...');
@@ -86,7 +92,7 @@ class GenerateSamplePresentationCommand extends Command
             $presentation->create();
 
             // Save directly to file system
-            $writer = new \PhpOffice\PhpPresentation\Writer\PowerPoint2007($presentation->document);
+            $writer = IOFactory::createWriter($presentation->document, WriterType::PowerPoint2007->value);
             $filePath = $directory.'/'.$filename.'.pptx';
             $writer->save($filePath);
 
@@ -123,36 +129,11 @@ class GenerateSamplePresentationCommand extends Command
 
         // Use first registered branding
         $allBrandings = Brandings::all();
+
         if (! empty($allBrandings)) {
             return array_values($allBrandings)[0];
         }
 
         return null;
-    }
-
-    /**
-     * Determine where to save the presentation.
-     */
-    protected function determineSaveDirectory(): string
-    {
-        // Check if we're in an application context (Laravel app)
-        if (function_exists('storage_path')) {
-            try {
-                $directory = storage_path('tmp');
-            } catch (\Exception $e) {
-                // Fallback to package tmp directory
-                $directory = base_path('tmp');
-            }
-        } else {
-            // We're in package development context
-            $directory = base_path('tmp');
-        }
-
-        // Create directory if it doesn't exist
-        if (! is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
-        return $directory;
     }
 }
