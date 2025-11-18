@@ -17,7 +17,6 @@ class ChartFactory
      *
      * @param  string  $type  Chart type (Bar, StackedBar, Line, etc.)
      * @param  array  $chartData  Chart data with 'series' array
-     * @return ChartComponent
      */
     public static function create(string $type, array $chartData): ChartComponent
     {
