@@ -72,7 +72,7 @@ class GenerateSamplePresentationCommand extends Command
         $directory = $this->determineSaveDirectory();
         $filename = 'sample-presentation-'.date('Y-m-d-His');
 
-        $this->info("Generating presentation with ".count($slides)." slides...");
+        $this->info('Generating presentation with '.count($slides).' slides...');
 
         // Create the presentation
         try {
