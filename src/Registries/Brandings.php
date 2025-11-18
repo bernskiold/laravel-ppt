@@ -5,51 +5,78 @@ namespace BernskioldMedia\LaravelPpt\Registries;
 class Brandings
 {
     /**
-     * Registered brandings.
+     * Registered branding classes.
      *
      * Brandings can be registered in a service provider's boot() method:
-     * Brandings::register(['MyBrand' => MyBranding::class]);
+     * Brandings::register([MyBranding::class, AnotherBranding::class]);
      *
-     * @var array<string, class-string>
+     * @var array<class-string>
      */
     public static array $brandings = [];
 
     /**
-     * Get all registered brandings.
+     * Get all registered brandings with their labels.
      *
-     * @return array<string, class-string> Map of branding names to class names
+     * @return array<string, class-string> Map of branding labels to class names
      */
     public static function all(): array
     {
-        return static::$brandings;
+        $result = [];
+        foreach (static::$brandings as $class) {
+            $result[$class::label()] = $class;
+        }
+
+        return $result;
     }
 
     /**
-     * Get available branding names.
+     * Get available branding labels.
      *
      * @return array<string>
      */
     public static function names(): array
     {
-        return array_keys(static::$brandings);
+        return array_keys(static::all());
     }
 
     /**
-     * Check if a branding exists.
+     * Check if a branding exists by label.
      */
-    public static function exists(string $name): bool
+    public static function exists(string $label): bool
     {
-        return isset(static::$brandings[$name]);
+        foreach (static::$brandings as $class) {
+            if ($class::label() === $label) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Get the class name for a branding.
+     * Get the class name for a branding by label.
      *
      * @return class-string|null
      */
-    public static function getClass(string $name): ?string
+    public static function getClass(string $label): ?string
     {
-        return static::$brandings[$name] ?? null;
+        foreach (static::$brandings as $class) {
+            if ($class::label() === $label) {
+                return $class;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get all registered branding classes (raw list).
+     *
+     * @return array<class-string>
+     */
+    public static function classes(): array
+    {
+        return static::$brandings;
     }
 
     /**
@@ -62,36 +89,32 @@ class Brandings
      *     AnotherBranding::class,
      * ]);
      *
-     * The label() method on each class will be used as the registry key.
-     *
      * @param  array<class-string>  $brandings  Array of branding class names
      */
     public static function register(array $brandings): void
     {
-        // Convert class names to label => class format
-        $normalized = [];
-        foreach ($brandings as $class) {
-            $normalized[$class::label()] = $class;
-        }
-
         static::$brandings = array_merge(
             static::$brandings,
-            $normalized
+            $brandings
         );
     }
 
     /**
-     * Unregister one or more brandings by name.
+     * Unregister one or more brandings by class name.
      *
-     * Brandings::unregister(['MyBrand', 'AnotherBrand']);
+     * Brandings::unregister([MyBranding::class, AnotherBranding::class]);
      *
-     * @param  array<string>  $names  Array of branding names to remove
+     * @param  array<class-string>  $classes  Array of branding class names to remove
      */
-    public static function unregister(array $names): void
+    public static function unregister(array $classes): void
     {
-        foreach ($names as $name) {
-            unset(static::$brandings[$name]);
-        }
+        static::$brandings = array_filter(
+            static::$brandings,
+            fn ($class) => ! in_array($class, $classes, true)
+        );
+
+        // Re-index the array to maintain sequential numeric keys
+        static::$brandings = array_values(static::$brandings);
     }
 
     /**

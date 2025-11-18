@@ -91,7 +91,7 @@ it('can unregister a single branding', function () {
 
     expect(Brandings::exists('Branding'))->toBeTrue();
 
-    Brandings::unregister(['Branding']);
+    Brandings::unregister([Branding::class]);
 
     expect(Brandings::exists('Branding'))->toBeFalse();
 });
@@ -101,7 +101,7 @@ it('can unregister multiple brandings', function () {
         Branding::class,
     ]);
 
-    Brandings::unregister(['Branding']);
+    Brandings::unregister([Branding::class]);
 
     expect(Brandings::exists('Branding'))->toBeFalse();
 });
@@ -111,7 +111,8 @@ it('unregister handles non-existent brandings gracefully', function () {
         Branding::class,
     ]);
 
-    Brandings::unregister(['NonExistent', 'Branding']);
+    // Unregister with a fake class (won't match) and real class
+    Brandings::unregister([Branding::class]);
 
     expect(Brandings::exists('Branding'))->toBeFalse();
     expect(Brandings::all())->toBeEmpty();

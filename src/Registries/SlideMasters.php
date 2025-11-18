@@ -128,31 +128,18 @@ class SlideMasters
     }
 
     /**
-     * Unregister one or more slide masters.
+     * Unregister one or more slide masters by class name.
      *
-     * Accepts either master names (e.g., 'Title', 'Blank With Title') or full class names.
+     * SlideMasters::unregister([Title::class, CustomMaster::class]);
      *
-     * SlideMasters::unregister(['Title', 'Blank With Title', CustomMaster::class]);
-     *
-     * @param  array<string>  $names  Array of master names or class names to remove
+     * @param  array<class-string>  $classes  Array of slide master class names to remove
      */
-    public static function unregister(array $names): void
+    public static function unregister(array $classes): void
     {
-        foreach ($names as $name) {
-            // If it contains a backslash, treat it as a class name
-            if (str_contains($name, '\\')) {
-                static::$masters = array_filter(
-                    static::$masters,
-                    fn ($class) => $class !== $name
-                );
-            } else {
-                // Otherwise, treat it as a master name (using label)
-                static::$masters = array_filter(
-                    static::$masters,
-                    fn ($class) => $class::label() !== $name
-                );
-            }
-        }
+        static::$masters = array_filter(
+            static::$masters,
+            fn ($class) => ! in_array($class, $classes, true)
+        );
 
         // Re-index the array to maintain sequential numeric keys
         static::$masters = array_values(static::$masters);

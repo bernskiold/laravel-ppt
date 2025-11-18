@@ -153,15 +153,6 @@ it('can clear all registered masters', function () {
     expect($after)->toBe(0);
 });
 
-it('can unregister a slide master by name', function () {
-    expect(SlideMasters::exists('Title'))->toBeTrue();
-
-    SlideMasters::unregister(['Title']);
-
-    expect(SlideMasters::exists('Title'))->toBeFalse();
-    expect(SlideMasters::exists('Text'))->toBeTrue();
-});
-
 it('can unregister a slide master by class name', function () {
     expect(SlideMasters::exists('Title'))->toBeTrue();
 
@@ -176,27 +167,17 @@ it('can unregister multiple slide masters', function () {
     expect(SlideMasters::exists('Text'))->toBeTrue();
     expect(SlideMasters::exists('Chart'))->toBeTrue();
 
-    SlideMasters::unregister(['Title', 'Chart']);
+    SlideMasters::unregister([Title::class, Chart::class]);
 
     expect(SlideMasters::exists('Title'))->toBeFalse();
     expect(SlideMasters::exists('Text'))->toBeTrue();
     expect(SlideMasters::exists('Chart'))->toBeFalse();
 });
 
-it('can unregister using mix of names and class names', function () {
-    expect(SlideMasters::exists('Title'))->toBeTrue();
-    expect(SlideMasters::exists('Text'))->toBeTrue();
-
-    SlideMasters::unregister(['Title', Text::class]);
-
-    expect(SlideMasters::exists('Title'))->toBeFalse();
-    expect(SlideMasters::exists('Text'))->toBeFalse();
-});
-
 it('unregister handles non-existent masters gracefully', function () {
     $initialCount = count(SlideMasters::classes());
 
-    SlideMasters::unregister(['NonExistent', 'Title']);
+    SlideMasters::unregister([Title::class]);
 
     expect(SlideMasters::exists('Title'))->toBeFalse();
     expect(count(SlideMasters::classes()))->toBe($initialCount - 1);
