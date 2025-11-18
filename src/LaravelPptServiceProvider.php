@@ -39,7 +39,7 @@ class LaravelPptServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         // Register package's built-in slide masters
-        SlideMasters::registerPackage([
+        SlideMasters::register([
             Blank::class,
             BlankWithTitle::class,
             BlankWithTitleSubtitle::class,

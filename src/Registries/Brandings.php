@@ -5,50 +5,23 @@ namespace BernskioldMedia\LaravelPpt\Registries;
 class Brandings
 {
     /**
-     * Application-registered brandings via service provider.
+     * Registered brandings.
      *
-     * Applications can register custom brandings in their service provider:
-     * BrandingRegistry::register(['MyBrand' => MyBranding::class]);
-     *
-     * @var array<string, class-string>
-     */
-    public static array $appBrandings = [];
-
-    /**
-     * Package's built-in brandings.
-     *
-     * Populated by the service provider during boot.
-     * Currently empty - the package provides no default brandings.
-     * Applications are expected to provide their own branding implementations.
+     * Brandings can be registered in a service provider's boot() method:
+     * Brandings::register(['MyBrand' => MyBranding::class]);
      *
      * @var array<string, class-string>
      */
-    protected static array $packageBrandings = [];
+    public static array $brandings = [];
 
     /**
-     * Register package brandings (called by service provider).
-     *
-     * @param  array<string, class-string>  $brandings  Map of names to class names
-     */
-    public static function registerPackage(array $brandings): void
-    {
-        static::$packageBrandings = array_merge(
-            static::$packageBrandings,
-            $brandings
-        );
-    }
-
-    /**
-     * Get all registered brandings (package + app combined).
+     * Get all registered brandings.
      *
      * @return array<string, class-string> Map of branding names to class names
      */
     public static function all(): array
     {
-        return array_merge(
-            static::$packageBrandings,
-            static::$appBrandings
-        );
+        return static::$brandings;
     }
 
     /**
@@ -58,7 +31,7 @@ class Brandings
      */
     public static function names(): array
     {
-        return array_keys(static::all());
+        return array_keys(static::$brandings);
     }
 
     /**
@@ -66,7 +39,7 @@ class Brandings
      */
     public static function exists(string $name): bool
     {
-        return isset(static::all()[$name]);
+        return isset(static::$brandings[$name]);
     }
 
     /**
@@ -76,7 +49,7 @@ class Brandings
      */
     public static function getClass(string $name): ?string
     {
-        return static::all()[$name] ?? null;
+        return static::$brandings[$name] ?? null;
     }
 
     /**
@@ -84,7 +57,7 @@ class Brandings
      *
      * This is typically called in a service provider's boot() method:
      *
-     * BrandingRegistry::register([
+     * Brandings::register([
      *     'MyBrand' => MyBranding::class,
      *     'AnotherBrand' => AnotherBranding::class,
      * ]);
@@ -93,8 +66,8 @@ class Brandings
      */
     public static function register(array $brandings): void
     {
-        static::$appBrandings = array_merge(
-            static::$appBrandings,
+        static::$brandings = array_merge(
+            static::$brandings,
             $brandings
         );
     }
@@ -104,7 +77,6 @@ class Brandings
      */
     public static function clear(): void
     {
-        static::$packageBrandings = [];
-        static::$appBrandings = [];
+        static::$brandings = [];
     }
 }

@@ -27,8 +27,8 @@ beforeEach(function () {
     Brandings::clear();
     SlideMasters::clear();
 
-    // Register package's built-in slide masters (simulating service provider)
-    SlideMasters::registerPackage([
+    // Register built-in slide masters (simulating service provider)
+    SlideMasters::register([
         Blank::class,
         BlankWithTitle::class,
         BlankWithTitleSubtitle::class,

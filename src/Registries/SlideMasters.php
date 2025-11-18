@@ -2,22 +2,6 @@
 
 namespace BernskioldMedia\LaravelPpt\Registries;
 
-use BernskioldMedia\LaravelPpt\SlideMasters\Blank;
-use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\BlankWithTitleSubtitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\BulletPoints;
-use BernskioldMedia\LaravelPpt\SlideMasters\Chart;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartSquare;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartText;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitles;
-use BernskioldMedia\LaravelPpt\SlideMasters\FourUp;
-use BernskioldMedia\LaravelPpt\SlideMasters\SixUp;
-use BernskioldMedia\LaravelPpt\SlideMasters\Text;
-use BernskioldMedia\LaravelPpt\SlideMasters\Title;
-use BernskioldMedia\LaravelPpt\SlideMasters\TitleSubtitle;
-use BernskioldMedia\LaravelPpt\SlideMasters\TwoUp;
-
 use function class_basename;
 use function collect;
 use function interface_exists;
@@ -27,37 +11,14 @@ use function method_exists;
 class SlideMasters
 {
     /**
-     * Application-registered slide masters via service provider.
+     * Registered slide masters.
      *
-     * Applications can register custom masters in their service provider:
-     * MasterRegistry::register([CustomMaster::class]);
-     *
-     * @var array<class-string>
-     */
-    public static array $appMasters = [];
-
-    /**
-     * Package's built-in slide masters.
-     *
-     * Populated by the service provider during boot.
-     * These are automatically available to all applications using the package.
+     * Masters can be registered in a service provider's boot() method:
+     * SlideMasters::register([CustomMaster::class]);
      *
      * @var array<class-string>
      */
-    protected static array $packageMasters = [];
-
-    /**
-     * Register package slide masters (called by service provider).
-     *
-     * @param  array<class-string>  $masters  Array of slide master class names
-     */
-    public static function registerPackage(array $masters): void
-    {
-        static::$packageMasters = array_merge(
-            static::$packageMasters,
-            $masters
-        );
-    }
+    public static array $masters = [];
 
     /**
      * Get all registered slide masters with their metadata.
@@ -69,12 +30,7 @@ class SlideMasters
      */
     public static function all(): array
     {
-        $allMasters = array_merge(
-            static::$packageMasters,
-            static::$appMasters
-        );
-
-        return collect($allMasters)
+        return collect(static::$masters)
             ->filter(function ($class) {
                 // Check if DynamicallyCreatable interface exists
                 if (! interface_exists('BernskioldMedia\\LaravelPpt\\Contracts\\DynamicallyCreatable')) {
@@ -157,7 +113,7 @@ class SlideMasters
      *
      * This is typically called in a service provider's boot() method:
      *
-     * MasterRegistry::register([
+     * SlideMasters::register([
      *     CustomMaster::class,
      *     AnotherMaster::class,
      * ]);
@@ -166,8 +122,8 @@ class SlideMasters
      */
     public static function register(array $masters): void
     {
-        static::$appMasters = array_merge(
-            static::$appMasters,
+        static::$masters = array_merge(
+            static::$masters,
             $masters
         );
     }
@@ -179,10 +135,7 @@ class SlideMasters
      */
     public static function classes(): array
     {
-        return array_merge(
-            static::$packageMasters,
-            static::$appMasters
-        );
+        return static::$masters;
     }
 
     /**
@@ -190,7 +143,6 @@ class SlideMasters
      */
     public static function clear(): void
     {
-        static::$packageMasters = [];
-        static::$appMasters = [];
+        static::$masters = [];
     }
 }

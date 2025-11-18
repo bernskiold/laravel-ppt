@@ -18,11 +18,11 @@ use BernskioldMedia\LaravelPpt\SlideMasters\TitleSubtitle;
 use BernskioldMedia\LaravelPpt\SlideMasters\TwoUp;
 
 beforeEach(function () {
-    // Clear and re-register package masters before each test
+    // Clear and re-register masters before each test
     SlideMasters::clear();
 
-    // Register package's built-in slide masters (simulating service provider)
-    SlideMasters::registerPackage([
+    // Register built-in slide masters (simulating service provider)
+    SlideMasters::register([
         Blank::class,
         BlankWithTitle::class,
         BlankWithTitleSubtitle::class,
@@ -41,7 +41,7 @@ beforeEach(function () {
     ]);
 });
 
-it('includes package slide masters by default', function () {
+it('includes registered slide masters', function () {
     $masters = SlideMasters::all();
 
     expect($masters)->toHaveKey('Title');
@@ -49,7 +49,7 @@ it('includes package slide masters by default', function () {
     expect($masters)->toHaveKey('Chart');
 });
 
-it('returns package master classes', function () {
+it('returns registered master classes', function () {
     $classes = SlideMasters::classes();
 
     expect($classes)->toContain(Title::class);
@@ -83,15 +83,13 @@ it('can register custom slide masters', function () {
 
     $classes = SlideMasters::classes();
 
-    // Should still have package masters
+    // Should still have registered masters
     expect($classes)->toContain(Title::class);
 });
 
-it('merges package and app slide masters', function () {
-    // Note: Since we can't easily create a custom test master without modifying package structure,
-    // we verify the merge mechanism works
-    $packageClasses = SlideMasters::classes();
-    $initialCount = count($packageClasses);
+it('can register additional slide masters', function () {
+    $initialClasses = SlideMasters::classes();
+    $initialCount = count($initialClasses);
 
     // Register an additional master (using an existing one for test)
     SlideMasters::register([
@@ -132,7 +130,7 @@ it('includes example data from DynamicallyCreatable interface', function () {
     expect($master['example'])->toHaveKey('title');
 });
 
-it('can clear registered application masters', function () {
+it('can clear all registered masters', function () {
     SlideMasters::register([
         Text::class,
     ]);
@@ -143,6 +141,6 @@ it('can clear registered application masters', function () {
 
     $after = count(SlideMasters::classes());
 
-    // After clearing, should only have package masters
-    expect($after)->toBeLessThan($before);
+    // After clearing, should have fewer masters
+    expect($after)->toBe(0);
 });
