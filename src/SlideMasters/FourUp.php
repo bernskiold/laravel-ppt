@@ -5,20 +5,23 @@ namespace BernskioldMedia\LaravelPpt\SlideMasters;
 use BernskioldMedia\LaravelPpt\Components\TextBox;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\HasBoxes;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithSlideTitle;
+use BernskioldMedia\LaravelPpt\Contracts\DynamicallyCreatable;
 use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 
 /**
- * @method static static make(string $title = '')
+ * @method static static make(string $title = '', array $boxes = [])
  */
-class FourUp extends BaseSlide
+class FourUp extends BaseSlide implements DynamicallyCreatable
 {
     use HasBoxes,
         WithSlideTitle;
 
     public function __construct(
         string $title = '',
+        array $boxes = [],
     ) {
         $this->slideTitle = $title;
+        $this->boxes = $boxes;
     }
 
     protected function render(): void
@@ -57,5 +60,63 @@ class FourUp extends BaseSlide
             ->width($boxWidth)
             ->position($xOffset, $yOffset + $title->height + 5)
             ->render();
+    }
+
+    public static function dataSchema(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'title' => [
+                    'type' => 'string',
+                    'description' => 'The slide title',
+                ],
+                'boxes' => [
+                    'type' => 'array',
+                    'description' => 'Array of box data (4 boxes in 2x2 grid)',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'title' => ['type' => 'string'],
+                            'description' => ['type' => 'string'],
+                        ],
+                        'required' => ['title', 'description'],
+                    ],
+                    'minItems' => 4,
+                    'maxItems' => 4,
+                ],
+            ],
+            'required' => ['title', 'boxes'],
+        ];
+    }
+
+    public static function description(): string
+    {
+        return 'A slide with a title and four content boxes in a 2x2 grid';
+    }
+
+    public static function exampleData(): array
+    {
+        return [
+            'title' => 'Our Core Values',
+            'boxes' => [
+                [
+                    'title' => 'Innovation',
+                    'description' => 'Pushing boundaries and exploring new possibilities.',
+                ],
+                [
+                    'title' => 'Quality',
+                    'description' => 'Excellence in everything we deliver.',
+                ],
+                [
+                    'title' => 'Collaboration',
+                    'description' => 'Working together towards common goals.',
+                ],
+                [
+                    'title' => 'Integrity',
+                    'description' => 'Transparency and honesty in all interactions.',
+                ],
+            ],
+        ];
     }
 }

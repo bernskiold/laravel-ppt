@@ -13,8 +13,8 @@ it('can be created', function () {
 it('loads default values from config', function () {
     $branding = Branding::make();
 
-    expect($branding->url())->toBe('https://bernskioldmedia.com')
-        ->and($branding->creatorCompanyName())->toBe('Bernskiold Media')
+    expect($branding->url())->toBe(config('app.url', '#'))
+        ->and($branding->creatorCompanyName())->toBe(config('app.name', ''))
         ->and($branding->baseFont())->toBe('Arial')
         ->and($branding->chartColors())->toBe(['ff000000']);
 });
