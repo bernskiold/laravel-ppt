@@ -44,18 +44,18 @@ beforeEach(function () {
 it('includes registered slide masters', function () {
     $masters = SlideMasters::all();
 
-    expect($masters)->toHaveKey('Title');
-    expect($masters)->toHaveKey('Text');
-    expect($masters)->toHaveKey('Chart');
+    expect($masters)->toHaveKey('title');
+    expect($masters)->toHaveKey('text');
+    expect($masters)->toHaveKey('chart');
 });
 
-it('uses human-readable labels for master names', function () {
+it('uses kebab-case keys for master identification', function () {
     $masters = SlideMasters::all();
 
     // Only masters that implement DynamicallyCreatable appear in all()
-    expect($masters)->toHaveKey('Bullet Points');
-    expect($masters)->toHaveKey('Chart Square');
-    expect($masters)->toHaveKey('Title Subtitle');
+    expect($masters)->toHaveKey('bullet-points');
+    expect($masters)->toHaveKey('chart-square');
+    expect($masters)->toHaveKey('title-subtitle');
 });
 
 it('returns registered master classes', function () {
@@ -66,22 +66,22 @@ it('returns registered master classes', function () {
 });
 
 it('checks if a slide master exists', function () {
-    expect(SlideMasters::exists('Title'))->toBeTrue();
-    expect(SlideMasters::exists('NonExistent'))->toBeFalse();
+    expect(SlideMasters::exists('title'))->toBeTrue();
+    expect(SlideMasters::exists('non-existent'))->toBeFalse();
 });
 
 it('gets class name for a slide master', function () {
-    expect(SlideMasters::getClass('Title'))->toBe(Title::class);
+    expect(SlideMasters::getClass('title'))->toBe(Title::class);
 });
 
 it('returns null for non-existent master', function () {
-    expect(SlideMasters::getClass('NonExistent'))->toBeNull();
+    expect(SlideMasters::getClass('non-existent'))->toBeNull();
 });
 
-it('returns master names', function () {
+it('returns master keys', function () {
     $names = SlideMasters::names();
 
-    expect($names)->toContain('Title', 'Text', 'Chart');
+    expect($names)->toContain('title', 'text', 'chart');
 });
 
 it('can register custom slide masters', function () {
@@ -112,29 +112,31 @@ it('can register additional slide masters', function () {
 });
 
 it('returns master definition with metadata', function () {
-    $master = SlideMasters::get('Title');
+    $master = SlideMasters::get('title');
 
     expect($master)->toHaveKey('class');
+    expect($master)->toHaveKey('key');
+    expect($master)->toHaveKey('label');
     expect($master)->toHaveKey('description');
     expect($master)->toHaveKey('schema');
     expect($master)->toHaveKey('example');
 });
 
 it('includes description from DynamicallyCreatable interface', function () {
-    $master = SlideMasters::get('Title');
+    $master = SlideMasters::get('title');
 
     expect($master['description'])->toBe('A simple slide with a centered title');
 });
 
 it('includes schema from DynamicallyCreatable interface', function () {
-    $master = SlideMasters::get('Title');
+    $master = SlideMasters::get('title');
 
     expect($master['schema'])->toHaveKey('type');
     expect($master['schema'])->toHaveKey('properties');
 });
 
 it('includes example data from DynamicallyCreatable interface', function () {
-    $master = SlideMasters::get('Title');
+    $master = SlideMasters::get('title');
 
     expect($master['example'])->toHaveKey('title');
 });
@@ -155,24 +157,24 @@ it('can clear all registered masters', function () {
 });
 
 it('can unregister a slide master by class name', function () {
-    expect(SlideMasters::exists('Title'))->toBeTrue();
+    expect(SlideMasters::exists('title'))->toBeTrue();
 
     SlideMasters::unregister([Title::class]);
 
-    expect(SlideMasters::exists('Title'))->toBeFalse();
-    expect(SlideMasters::exists('Text'))->toBeTrue();
+    expect(SlideMasters::exists('title'))->toBeFalse();
+    expect(SlideMasters::exists('text'))->toBeTrue();
 });
 
 it('can unregister multiple slide masters', function () {
-    expect(SlideMasters::exists('Title'))->toBeTrue();
-    expect(SlideMasters::exists('Text'))->toBeTrue();
-    expect(SlideMasters::exists('Chart'))->toBeTrue();
+    expect(SlideMasters::exists('title'))->toBeTrue();
+    expect(SlideMasters::exists('text'))->toBeTrue();
+    expect(SlideMasters::exists('chart'))->toBeTrue();
 
     SlideMasters::unregister([Title::class, Chart::class]);
 
-    expect(SlideMasters::exists('Title'))->toBeFalse();
-    expect(SlideMasters::exists('Text'))->toBeTrue();
-    expect(SlideMasters::exists('Chart'))->toBeFalse();
+    expect(SlideMasters::exists('title'))->toBeFalse();
+    expect(SlideMasters::exists('text'))->toBeTrue();
+    expect(SlideMasters::exists('chart'))->toBeFalse();
 });
 
 it('unregister handles non-existent masters gracefully', function () {
@@ -180,6 +182,6 @@ it('unregister handles non-existent masters gracefully', function () {
 
     SlideMasters::unregister([Title::class]);
 
-    expect(SlideMasters::exists('Title'))->toBeFalse();
+    expect(SlideMasters::exists('title'))->toBeFalse();
     expect(count(SlideMasters::classes()))->toBe($initialCount - 1);
 });

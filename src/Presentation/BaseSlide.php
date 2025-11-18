@@ -256,6 +256,18 @@ abstract class BaseSlide implements SlideContract
     }
 
     /**
+     * Get the slug key for the slide master.
+     * Used for registry lookups and identification.
+     */
+    public static function key(): string
+    {
+        return str(static::class)
+            ->classBasename()
+            ->kebab()
+            ->toString();
+    }
+
+    /**
      * Get a human-readable label for the slide master.
      */
     public static function label(): string

@@ -23,7 +23,7 @@ class SlideMasters
      * Get all registered slide masters with their metadata.
      *
      * Returns masters that implement DynamicallyCreatable (if interface exists).
-     * Each master includes: class, description, schema, example.
+     * Each master includes: class, key, label, description, schema, example.
      *
      * @return array<string, array>
      */
@@ -39,7 +39,7 @@ class SlideMasters
                 return is_subclass_of($class, 'BernskioldMedia\\LaravelPpt\\Contracts\\DynamicallyCreatable');
             })
             ->mapWithKeys(fn ($class) => [
-                $class::label() => static::buildMasterDefinition($class),
+                $class::key() => static::buildMasterDefinition($class),
             ])
             ->all();
     }
@@ -52,6 +52,10 @@ class SlideMasters
     protected static function buildMasterDefinition(string $class): array
     {
         $definition = ['class' => $class];
+
+        if (method_exists($class, 'key')) {
+            $definition['key'] = $class::key();
+        }
 
         if (method_exists($class, 'label')) {
             $definition['label'] = $class::label();
@@ -74,37 +78,42 @@ class SlideMasters
     }
 
     /**
-     * Get a specific slide master definition.
-     */
-    public static function get(string $masterName): ?array
-    {
-        return static::all()[$masterName] ?? null;
-    }
-
-    /**
-     * Check if a slide master exists.
-     */
-    public static function exists(string $masterName): bool
-    {
-        return isset(static::all()[$masterName]);
-    }
-
-    /**
-     * Get the class name for a slide master.
+     * Get a specific slide master definition by its key.
      *
+     * @param  string  $masterKey  The slide master key (e.g., 'title-subtitle')
+     */
+    public static function get(string $masterKey): ?array
+    {
+        return static::all()[$masterKey] ?? null;
+    }
+
+    /**
+     * Check if a slide master exists by its key.
+     *
+     * @param  string  $masterKey  The slide master key (e.g., 'title-subtitle')
+     */
+    public static function exists(string $masterKey): bool
+    {
+        return isset(static::all()[$masterKey]);
+    }
+
+    /**
+     * Get the class name for a slide master by its key.
+     *
+     * @param  string  $masterKey  The slide master key (e.g., 'title-subtitle')
      * @return class-string|null
      */
-    public static function getClass(string $masterName): ?string
+    public static function getClass(string $masterKey): ?string
     {
-        $master = static::get($masterName);
+        $master = static::get($masterKey);
 
         return $master['class'] ?? null;
     }
 
     /**
-     * Get available slide master names.
+     * Get available slide master keys.
      *
-     * @return array<string>
+     * @return array<string>  Array of master keys (e.g., ['title', 'title-subtitle', ...])
      */
     public static function names(): array
     {

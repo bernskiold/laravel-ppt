@@ -81,13 +81,13 @@ it('throws exception for invalid branding', function () {
     );
 })->throws(InvalidArgumentException::class, 'not found in registry');
 
-it('creates presentation with slides using master names from registry', function () {
+it('creates presentation with slides using master keys from registry', function () {
     $presentation = PresentationFactory::create(
         title: 'Test Presentation',
         branding: Branding::class,
         slides: [
             [
-                'master' => 'Title',
+                'master' => 'title',
                 'data' => ['title' => 'Test Slide'],
             ],
         ]
@@ -126,7 +126,7 @@ it('throws exception for missing data key in slide config', function () {
         title: 'Test',
         branding: Branding::class,
         slides: [
-            ['master' => 'Title'],
+            ['master' => 'title'],
         ]
     );
 })->throws(InvalidArgumentException::class, "missing required 'data' key");
@@ -152,7 +152,7 @@ it('saves presentation and returns file information', function () {
         branding: Branding::class,
         slides: [
             [
-                'master' => 'Title',
+                'master' => 'title',
                 'data' => ['title' => 'Test'],
             ],
         ]
@@ -176,7 +176,7 @@ it('creates and saves presentation in one step', function () {
         branding: Branding::class,
         slides: [
             [
-                'master' => 'Title',
+                'master' => 'title',
                 'data' => ['title' => 'Test Slide'],
             ],
         ]
@@ -278,7 +278,7 @@ it('saves presentation as HTML with correct extension', function () {
         branding: Branding::class,
         slides: [
             [
-                'master' => 'Title',
+                'master' => 'title',
                 'data' => ['title' => 'Test'],
             ],
         ]
@@ -304,7 +304,7 @@ it('saves presentation as ODPresentation with correct extension', function () {
         branding: Branding::class,
         slides: [
             [
-                'master' => 'Title',
+                'master' => 'title',
                 'data' => ['title' => 'Test'],
             ],
         ]

@@ -19,7 +19,7 @@ class PresentationFactory
      *
      * @param  string  $title  Presentation title
      * @param  string  $branding  Branding label (e.g. 'My Branding') from registry or fully qualified class name
-     * @param  array  $slides  Array of slide configurations, each with 'master' (label or FQCN) and 'data' keys
+     * @param  array  $slides  Array of slide configurations, each with 'master' (key or FQCN) and 'data' keys
      * @param  int|null  $width  Presentation width in pixels
      * @param  int|null  $height  Presentation height in pixels
      * @param  WriterType|null  $writerType  Output format type (default: PowerPoint2007)
@@ -179,7 +179,7 @@ class PresentationFactory
     /**
      * Add a slide to the presentation using SlideFactory.
      *
-     * @param  array  $slideConfig  Must contain 'master' (name or FQCN) and 'data' (array) keys
+     * @param  array  $slideConfig  Must contain 'master' (key or FQCN) and 'data' (array) keys
      * @param  int  $index  Slide index for error messages
      *
      * @throws InvalidArgumentException
@@ -213,9 +213,9 @@ class PresentationFactory
     }
 
     /**
-     * Resolve a master label or class to a fully qualified class name.
+     * Resolve a master key or class to a fully qualified class name.
      *
-     * @param  string  $master  Master label (e.g. 'Blank With Title') or fully qualified class name
+     * @param  string  $master  Master key (e.g. 'title-subtitle') or fully qualified class name
      * @param  int  $index  Slide index for error messages
      * @return class-string
      *
@@ -223,7 +223,7 @@ class PresentationFactory
      */
     protected static function resolveMaster(string $master, int $index): string
     {
-        // Try to resolve from registry first
+        // Try to resolve from registry first by key
         if (SlideMasters::exists($master)) {
             return SlideMasters::getClass($master);
         }
@@ -232,7 +232,7 @@ class PresentationFactory
         if (! class_exists($master)) {
             throw new InvalidArgumentException(
                 "Slide master '{$master}' at index {$index} not found in registry and class does not exist. ".
-                'Available masters: '.implode(', ', SlideMasters::names())
+                'Available master keys: '.implode(', ', SlideMasters::names())
             );
         }
 
