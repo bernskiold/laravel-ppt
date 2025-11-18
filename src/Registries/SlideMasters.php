@@ -40,7 +40,7 @@ class SlideMasters
                 return is_subclass_of($class, 'BernskioldMedia\\LaravelPpt\\Contracts\\DynamicallyCreatable');
             })
             ->mapWithKeys(fn ($class) => [
-                class_basename($class) => static::buildMasterDefinition($class),
+                $class::label() => static::buildMasterDefinition($class),
             ])
             ->all();
     }
@@ -131,9 +131,9 @@ class SlideMasters
     /**
      * Unregister one or more slide masters.
      *
-     * Accepts either master names (e.g., 'Title') or full class names.
+     * Accepts either master names (e.g., 'Title', 'Blank With Title') or full class names.
      *
-     * SlideMasters::unregister(['Title', CustomMaster::class]);
+     * SlideMasters::unregister(['Title', 'Blank With Title', CustomMaster::class]);
      *
      * @param  array<string>  $names  Array of master names or class names to remove
      */
@@ -147,10 +147,10 @@ class SlideMasters
                     fn ($class) => $class !== $name
                 );
             } else {
-                // Otherwise, treat it as a master name (basename)
+                // Otherwise, treat it as a master name (using label)
                 static::$masters = array_filter(
                     static::$masters,
-                    fn ($class) => class_basename($class) !== $name
+                    fn ($class) => $class::label() !== $name
                 );
             }
         }

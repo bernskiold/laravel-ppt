@@ -15,11 +15,13 @@ use BernskioldMedia\LaravelPpt\Concerns\Slides\WithSize;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithTextColor;
 use BernskioldMedia\LaravelPpt\Contracts\Slide as SlideContract;
 use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
 use PhpOffice\PhpPresentation\Slide;
 use PhpOffice\PhpPresentation\Slide\Background\Color;
 
+use function class_basename;
 use function config;
 use function tap;
 
@@ -253,5 +255,13 @@ abstract class BaseSlide implements SlideContract
     public function raw(): Slide
     {
         return $this->slide;
+    }
+
+    /**
+     * Get a human-readable label for the slide master.
+     */
+    public static function label(): string
+    {
+        return Str::title(Str::snake(class_basename(static::class), ' '));
     }
 }

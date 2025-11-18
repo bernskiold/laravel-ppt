@@ -62,13 +62,32 @@ class Brandings
      *     'AnotherBrand' => AnotherBranding::class,
      * ]);
      *
-     * @param  array<string, class-string>  $brandings  Map of names to class names
+     * Or with class-only format (uses label() method):
+     *
+     * Brandings::register([
+     *     MyBranding::class,
+     *     AnotherBranding::class,
+     * ]);
+     *
+     * @param  array<string, class-string>|array<class-string>  $brandings  Map of names to class names, or array of class names
      */
     public static function register(array $brandings): void
     {
+        // Normalize to associative array format
+        $normalized = [];
+        foreach ($brandings as $key => $value) {
+            // If key is numeric, it's class-only format - use label() method
+            if (is_numeric($key)) {
+                $normalized[$value::label()] = $value;
+            } else {
+                // It's already key => class format
+                $normalized[$key] = $value;
+            }
+        }
+
         static::$brandings = array_merge(
             static::$brandings,
-            $brandings
+            $normalized
         );
     }
 

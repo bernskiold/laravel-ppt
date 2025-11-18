@@ -103,6 +103,14 @@ class Branding
     }
 
     /**
+     * Get a human-readable label for the branding.
+     */
+    public static function label(): string
+    {
+        return Str::title(Str::snake(class_basename(static::class), ' '));
+    }
+
+    /**
      * The default theme for all brandings.
      */
     public function defaultTheme(): SlideTheme

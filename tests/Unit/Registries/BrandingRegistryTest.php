@@ -16,13 +16,22 @@ it('returns empty names array by default', function () {
     expect(Brandings::names())->toBeEmpty();
 });
 
-it('can register a single branding', function () {
+it('can register a single branding with key', function () {
     Brandings::register([
         'TestBrand' => Branding::class,
     ]);
 
     expect(Brandings::all())->toHaveKey('TestBrand');
     expect(Brandings::getClass('TestBrand'))->toBe(Branding::class);
+});
+
+it('can register a single branding with class only', function () {
+    Brandings::register([
+        Branding::class,
+    ]);
+
+    expect(Brandings::all())->toHaveKey('Branding');
+    expect(Brandings::getClass('Branding'))->toBe(Branding::class);
 });
 
 it('can register multiple brandings', function () {

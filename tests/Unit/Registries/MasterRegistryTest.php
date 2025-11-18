@@ -49,6 +49,14 @@ it('includes registered slide masters', function () {
     expect($masters)->toHaveKey('Chart');
 });
 
+it('uses human-readable labels for master names', function () {
+    $masters = SlideMasters::all();
+
+    expect($masters)->toHaveKey('Blank With Title');
+    expect($masters)->toHaveKey('Chart Square');
+    expect($masters)->toHaveKey('Title Subtitle');
+});
+
 it('returns registered master classes', function () {
     $classes = SlideMasters::classes();
 

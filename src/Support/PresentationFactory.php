@@ -17,8 +17,8 @@ class PresentationFactory
      * Create a presentation from structured data.
      *
      * @param  string  $title  Presentation title
-     * @param  string  $branding  Branding name from BrandingRegistry or fully qualified class name
-     * @param  array  $slides  Array of slide configurations, each with 'master' (name or FQCN) and 'data' keys
+     * @param  string  $branding  Branding label (e.g. 'My Branding') from registry or fully qualified class name
+     * @param  array  $slides  Array of slide configurations, each with 'master' (label or FQCN) and 'data' keys
      * @param  int|null  $width  Presentation width in pixels
      * @param  int|null  $height  Presentation height in pixels
      *
@@ -51,9 +51,9 @@ class PresentationFactory
     }
 
     /**
-     * Resolve a branding name or class to a fully qualified class name.
+     * Resolve a branding label or class to a fully qualified class name.
      *
-     * @param  string  $branding  Branding name or fully qualified class name
+     * @param  string  $branding  Branding label or fully qualified class name
      * @return class-string<Branding>
      *
      * @throws InvalidArgumentException
@@ -190,9 +190,9 @@ class PresentationFactory
     }
 
     /**
-     * Resolve a master name or class to a fully qualified class name.
+     * Resolve a master label or class to a fully qualified class name.
      *
-     * @param  string  $master  Master name or fully qualified class name
+     * @param  string  $master  Master label (e.g. 'Blank With Title') or fully qualified class name
      * @param  int  $index  Slide index for error messages
      * @return class-string
      *
