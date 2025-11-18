@@ -29,4 +29,26 @@ trait WithPosition
 
         return $this;
     }
+
+    /**
+     * Data schema for position properties.
+     */
+    protected static function dataSchemaWithPosition(): array
+    {
+        return [
+            'properties' => [
+                'x' => [
+                    'type' => 'number',
+                    'description' => 'X position in pixels from the left edge of the slide',
+                    'minimum' => 0,
+                ],
+                'y' => [
+                    'type' => 'number',
+                    'description' => 'Y position in pixels from the top edge of the slide',
+                    'minimum' => 0,
+                ],
+            ],
+            'required' => [],
+        ];
+    }
 }

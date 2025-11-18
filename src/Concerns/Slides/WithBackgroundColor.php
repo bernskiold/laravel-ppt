@@ -23,4 +23,21 @@ trait WithBackgroundColor
             ->setStartColor(new Color($this->backgroundColor))
             ->setEndColor(new Color($this->backgroundColor));
     }
+
+    /**
+     * Data schema for background color properties.
+     */
+    protected static function dataSchemaWithBackgroundColor(): array
+    {
+        return [
+            'properties' => [
+                'backgroundColor' => [
+                    'type' => 'string',
+                    'description' => 'Background color as hex code (e.g., "3498db" for blue)',
+                    'pattern' => '^[0-9A-Fa-f]{6}$',
+                ],
+            ],
+            'required' => [],
+        ];
+    }
 }

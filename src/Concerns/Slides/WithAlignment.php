@@ -99,4 +99,46 @@ trait WithAlignment
 
         return $this;
     }
+
+    /**
+     * Data schema for alignment properties.
+     */
+    protected static function dataSchemaWithAlignment(): array
+    {
+        return [
+            'properties' => [
+                'horizontalAlignment' => [
+                    'type' => 'string',
+                    'description' => 'Horizontal alignment',
+                    'enum' => ['left', 'center', 'right'],
+                ],
+                'verticalAlignment' => [
+                    'type' => 'string',
+                    'description' => 'Vertical alignment',
+                    'enum' => ['top', 'center', 'bottom'],
+                ],
+                'marginTop' => [
+                    'type' => 'number',
+                    'description' => 'Top margin in pixels',
+                    'minimum' => 0,
+                ],
+                'marginRight' => [
+                    'type' => 'number',
+                    'description' => 'Right margin in pixels',
+                    'minimum' => 0,
+                ],
+                'marginBottom' => [
+                    'type' => 'number',
+                    'description' => 'Bottom margin in pixels',
+                    'minimum' => 0,
+                ],
+                'marginLeft' => [
+                    'type' => 'number',
+                    'description' => 'Left margin in pixels',
+                    'minimum' => 0,
+                ],
+            ],
+            'required' => [],
+        ];
+    }
 }

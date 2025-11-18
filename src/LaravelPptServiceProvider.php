@@ -5,6 +5,11 @@ namespace BernskioldMedia\LaravelPpt;
 use BernskioldMedia\LaravelPpt\Commands\CreateNewSlideCommand;
 use BernskioldMedia\LaravelPpt\Commands\CreateNewSlideDeckCommand;
 use BernskioldMedia\LaravelPpt\Commands\GenerateSamplePresentationCommand;
+use BernskioldMedia\LaravelPpt\Components\BulletPointBox;
+use BernskioldMedia\LaravelPpt\Components\Image;
+use BernskioldMedia\LaravelPpt\Components\Shape;
+use BernskioldMedia\LaravelPpt\Components\TextBox;
+use BernskioldMedia\LaravelPpt\Registries\Components;
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
 use BernskioldMedia\LaravelPpt\SlideMasters\Agenda;
 use BernskioldMedia\LaravelPpt\SlideMasters\Blank;
@@ -71,6 +76,14 @@ class LaravelPptServiceProvider extends PackageServiceProvider
             TitleSubtitle::class,
             TwoColumn::class,
             TwoUp::class,
+        ]);
+
+        // Register package's built-in components
+        Components::register([
+            TextBox::class,
+            Image::class,
+            Shape::class,
+            BulletPointBox::class,
         ]);
     }
 }

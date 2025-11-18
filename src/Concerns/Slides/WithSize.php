@@ -21,4 +21,26 @@ trait WithSize
 
         return $this;
     }
+
+    /**
+     * Data schema for size properties.
+     */
+    protected static function dataSchemaWithSize(): array
+    {
+        return [
+            'properties' => [
+                'width' => [
+                    'type' => 'integer',
+                    'description' => 'Width in pixels',
+                    'minimum' => 1,
+                ],
+                'height' => [
+                    'type' => 'integer',
+                    'description' => 'Height in pixels',
+                    'minimum' => 1,
+                ],
+            ],
+            'required' => [],
+        ];
+    }
 }

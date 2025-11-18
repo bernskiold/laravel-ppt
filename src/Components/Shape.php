@@ -2,11 +2,13 @@
 
 namespace BernskioldMedia\LaravelPpt\Components;
 
+use BernskioldMedia\LaravelPpt\Concerns\HasDataSchema;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBackgroundColor;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBorder;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithRotation;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithShape;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithUrl;
+use BernskioldMedia\LaravelPpt\Contracts\DynamicallyCreatableComponent;
 use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 use PhpOffice\PhpPresentation\Shape\AutoShape;
 use PhpOffice\PhpPresentation\Style\Color;
@@ -17,8 +19,9 @@ use PhpOffice\PhpPresentation\Style\Fill;
  *
  * @method static static make(BaseSlide $slide)
  */
-class Shape extends Component
+class Shape extends Component implements DynamicallyCreatableComponent
 {
+    use HasDataSchema;
     use WithBackgroundColor,
         WithBorder,
         WithRotation,
@@ -91,5 +94,89 @@ class Shape extends Component
         $this->slide->raw()->addShape($this->shape);
 
         return $this;
+    }
+
+    public static function key(): string
+    {
+        return 'shape';
+    }
+
+    public static function description(): string
+    {
+        return 'A geometric shape component (rectangle, circle, rounded rectangle, etc.)';
+    }
+
+    public static function dataSchema(): array
+    {
+        return static::buildDataSchema([
+            'properties' => [
+                'shape' => [
+                    'type' => 'string',
+                    'description' => 'Shape type: rectangle, round (circle), rounded (rounded rectangle)',
+                    'enum' => ['rectangle', 'round', 'rounded'],
+                ],
+            ],
+            'required' => [],
+        ]);
+    }
+
+    public static function exampleData(): array
+    {
+        return [
+            'shape' => 'round',
+            'backgroundColor' => '3498db',
+            'x' => 100,
+            'y' => 100,
+            'width' => 200,
+            'height' => 200,
+        ];
+    }
+
+    public static function fromData(BaseSlide $slide, array $data): static
+    {
+        $component = static::make($slide);
+
+        // Apply shape type
+        if (isset($data['shape'])) {
+            match ($data['shape']) {
+                'round' => $component->round(),
+                'rounded' => $component->rounded(),
+                default => $component->type(AutoShape::TYPE_RECTANGLE),
+            };
+        }
+
+        // Apply position
+        if (isset($data['x']) && isset($data['y'])) {
+            $component->position($data['x'], $data['y']);
+        } elseif (isset($data['x'])) {
+            $component->x($data['x']);
+        } elseif (isset($data['y'])) {
+            $component->y($data['y']);
+        }
+
+        // Apply size
+        if (isset($data['width'])) {
+            $component->width($data['width']);
+        }
+        if (isset($data['height'])) {
+            $component->height($data['height']);
+        }
+
+        // Apply background color
+        if (isset($data['backgroundColor'])) {
+            $component->backgroundColor($data['backgroundColor']);
+        }
+
+        // Apply rotation
+        if (isset($data['rotation'])) {
+            $component->rotate($data['rotation']);
+        }
+
+        // Apply URL
+        if (isset($data['url'])) {
+            $component->url($data['url']);
+        }
+
+        return $component;
     }
 }

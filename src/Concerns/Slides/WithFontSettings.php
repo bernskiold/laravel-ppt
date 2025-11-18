@@ -75,4 +75,51 @@ trait WithFontSettings
 
         return $this;
     }
+
+    /**
+     * Data schema for font settings properties.
+     */
+    protected static function dataSchemaWithFontSettings(): array
+    {
+        return [
+            'properties' => [
+                'fontSize' => [
+                    'type' => 'integer',
+                    'description' => 'Font size in points',
+                    'minimum' => 1,
+                ],
+                'color' => [
+                    'type' => 'string',
+                    'description' => 'Text color as hex code (e.g., "FF0000" for red)',
+                    'pattern' => '^[0-9A-Fa-f]{6}$',
+                ],
+                'font' => [
+                    'type' => 'string',
+                    'description' => 'Font family name',
+                ],
+                'bold' => [
+                    'type' => 'boolean',
+                    'description' => 'Whether the text should be bold',
+                ],
+                'underlined' => [
+                    'type' => 'boolean',
+                    'description' => 'Whether the text should be underlined',
+                ],
+                'uppercase' => [
+                    'type' => 'boolean',
+                    'description' => 'Whether the text should be converted to uppercase',
+                ],
+                'letterSpacing' => [
+                    'type' => 'number',
+                    'description' => 'Letter spacing in points',
+                ],
+                'lineHeight' => [
+                    'type' => 'integer',
+                    'description' => 'Line height as percentage (e.g., 100 for normal)',
+                    'minimum' => 0,
+                ],
+            ],
+            'required' => [],
+        ];
+    }
 }

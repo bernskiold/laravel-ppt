@@ -45,4 +45,26 @@ trait WithUrl
 
         return null;
     }
+
+    /**
+     * Data schema for URL/link properties.
+     */
+    protected static function dataSchemaWithUrl(): array
+    {
+        return [
+            'properties' => [
+                'url' => [
+                    'type' => 'string',
+                    'description' => 'URL to link to',
+                    'format' => 'uri',
+                ],
+                'slideNumberAnchor' => [
+                    'type' => 'integer',
+                    'description' => 'Slide number to link to (internal link)',
+                    'minimum' => 1,
+                ],
+            ],
+            'required' => [],
+        ];
+    }
 }
