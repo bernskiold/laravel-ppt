@@ -34,7 +34,7 @@ class BulletPoints extends BaseSlide implements DynamicallyCreatable
     {
         $titleBox = $this->renderTitle();
 
-        $yOffset = $titleBox->height + 75;
+        $yOffset = $titleBox->height + 100;
         $box = null;
 
         foreach ($this->bulletPoints as $bulletPoint) {

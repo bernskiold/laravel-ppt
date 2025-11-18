@@ -11,7 +11,7 @@ use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 /**
  * @method static static make(string $title = '', array $boxes = [])
  */
-class SixUp extends BaseSlide implements DynamicallyCreatable
+class ThreeUp extends BaseSlide implements DynamicallyCreatable
 {
     use HasBoxes,
         WithSlideTitle;
@@ -26,26 +26,25 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
 
     protected function render(): void
     {
-        $this->renderTitle();
+        if (! empty($this->slideTitle)) {
+            $this->renderTitle();
+        }
 
-        $this->makeBoxes(1, 1, 1);
-        $this->makeBoxes(2, 2, 1);
-        $this->makeBoxes(3, 3, 1);
-        $this->makeBoxes(4, 1, 2);
-        $this->makeBoxes(5, 2, 2);
-        $this->makeBoxes(6, 3, 2);
+        $this->makeBoxes(1, 1);
+        $this->makeBoxes(2, 2);
+        $this->makeBoxes(3, 3);
     }
 
-    protected function makeBoxes(int $index, int $column = 1, int $row = 1): void
+    protected function makeBoxes(int $index, int $column = 1): void
     {
         if (! isset($this->boxes[$index - 1])) {
             return;
         }
 
-        $boxWidth = 350;
-        $boxHeight = 300;
-        $yOffset = $row === 1 ? 100 : $boxHeight + 40;
-        $xOffset = $column === 1 ? 40 : (($boxWidth * ($column - 1)) + (80 * ($column - 1)));
+        $columnGap = 30;
+        $boxWidth = (int) (($this->presentation->width - (2 * $this->horizontalPadding) - ($columnGap * 2)) / 3);
+        $yOffset = 150;
+        $xOffset = $this->horizontalPadding + (($column - 1) * ($boxWidth + $columnGap));
 
         $title = TextBox::make($this, $this->boxes[$index - 1]['title'])
             ->paragraphStyle('nUpGridTitle')
@@ -60,7 +59,7 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
             ->alignLeft()
             ->alignTop()
             ->width($boxWidth)
-            ->height($boxHeight - $title->height - 10)
+            ->height(400)
             ->position($xOffset, $yOffset + $title->height + 5)
             ->render();
     }
@@ -76,7 +75,7 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
                 ],
                 'boxes' => [
                     'type' => 'array',
-                    'description' => 'Array of box data (6 boxes in 3x2 grid)',
+                    'description' => 'Array of box data (3 boxes in a row)',
                     'items' => [
                         'type' => 'object',
                         'properties' => [
@@ -85,8 +84,8 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
                         ],
                         'required' => ['title', 'description'],
                     ],
-                    'minItems' => 6,
-                    'maxItems' => 6,
+                    'minItems' => 3,
+                    'maxItems' => 3,
                 ],
             ],
             'required' => ['title', 'boxes'],
@@ -95,7 +94,7 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
 
     public static function description(): string
     {
-        return 'A slide with a title and six content boxes in a 3x2 grid';
+        return 'A slide with a title and three content boxes in a single row';
     }
 
     public static function exampleData(): array
@@ -105,27 +104,15 @@ class SixUp extends BaseSlide implements DynamicallyCreatable
             'boxes' => [
                 [
                     'title' => 'Consulting',
-                    'description' => 'Expert guidance for your business.',
+                    'description' => 'Expert guidance for your business transformation.',
                 ],
                 [
                     'title' => 'Development',
-                    'description' => 'Custom software solutions.',
-                ],
-                [
-                    'title' => 'Design',
-                    'description' => 'Beautiful user experiences.',
-                ],
-                [
-                    'title' => 'Testing',
-                    'description' => 'Quality assurance and QA.',
+                    'description' => 'Custom solutions built to your specifications.',
                 ],
                 [
                     'title' => 'Support',
-                    'description' => '24/7 customer assistance.',
-                ],
-                [
-                    'title' => 'Training',
-                    'description' => 'Empowering your team.',
+                    'description' => '24/7 dedicated customer success team.',
                 ],
             ],
         ];

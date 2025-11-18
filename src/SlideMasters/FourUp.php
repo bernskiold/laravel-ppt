@@ -26,24 +26,26 @@ class FourUp extends BaseSlide implements DynamicallyCreatable
 
     protected function render(): void
     {
-        $this->renderTitle();
+        if (! empty($this->slideTitle)) {
+            $this->renderTitle();
+        }
 
-        $this->makeBoxes(1, 1, 1);
-        $this->makeBoxes(2, 2, 1);
-        $this->makeBoxes(3, 1, 2);
-        $this->makeBoxes(4, 2, 2);
+        $this->makeBoxes(1, 1);
+        $this->makeBoxes(2, 2);
+        $this->makeBoxes(3, 3);
+        $this->makeBoxes(4, 4);
     }
 
-    protected function makeBoxes(int $index, int $column = 1, int $row = 1): void
+    protected function makeBoxes(int $index, int $column = 1): void
     {
         if (! isset($this->boxes[$index - 1])) {
             return;
         }
 
-        $boxWidth = 550;
-        $boxHeight = 300;
-        $yOffset = $row === 1 ? 150 : $boxHeight + 40;
-        $xOffset = $column === 1 ? 40 : $boxWidth + 80;
+        $columnGap = 20;
+        $boxWidth = (int) (($this->presentation->width - (2 * $this->horizontalPadding) - ($columnGap * 3)) / 4);
+        $yOffset = 150;
+        $xOffset = $this->horizontalPadding + (($column - 1) * ($boxWidth + $columnGap));
 
         $title = TextBox::make($this, $this->boxes[$index - 1]['title'])
             ->paragraphStyle('nUpGridTitle')
@@ -58,6 +60,7 @@ class FourUp extends BaseSlide implements DynamicallyCreatable
             ->alignLeft()
             ->alignTop()
             ->width($boxWidth)
+            ->height(400)
             ->position($xOffset, $yOffset + $title->height + 5)
             ->render();
     }
@@ -73,7 +76,7 @@ class FourUp extends BaseSlide implements DynamicallyCreatable
                 ],
                 'boxes' => [
                     'type' => 'array',
-                    'description' => 'Array of box data (4 boxes in 2x2 grid)',
+                    'description' => 'Array of box data (4 boxes in a single row)',
                     'items' => [
                         'type' => 'object',
                         'properties' => [
@@ -92,7 +95,7 @@ class FourUp extends BaseSlide implements DynamicallyCreatable
 
     public static function description(): string
     {
-        return 'A slide with a title and four content boxes in a 2x2 grid';
+        return 'A slide with a title and four content boxes in a single row';
     }
 
     public static function exampleData(): array
