@@ -7,6 +7,8 @@ use BernskioldMedia\LaravelPpt\Concerns\Makeable;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithPadding;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithSize;
 use BernskioldMedia\LaravelPpt\Contracts\CustomizesPowerpointBranding;
+use BernskioldMedia\LaravelPpt\Enums\WriterType;
+use Closure;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Traits\Conditionable;
@@ -16,6 +18,7 @@ use PhpOffice\PhpPresentation\Exception\OutOfBoundsException;
 use PhpOffice\PhpPresentation\IOFactory;
 use PhpOffice\PhpPresentation\PhpPresentation;
 
+use PhpOffice\PhpPresentation\Writer\PDF\DomPDF;
 use function config;
 use function method_exists;
 
@@ -45,12 +48,23 @@ class Presentation
      */
     public ?Branding $branding = null;
 
+    /**
+     * The writer type to use when saving the presentation.
+     */
+    protected WriterType $writerType = WriterType::PowerPoint2007;
+
+    /**
+     * Custom configuration callback for the writer.
+     */
+    protected ?Closure $writerCallback = null;
+
     public function __construct(
         protected string $title,
-        ?int $width = null,
-        ?int $height = null,
-        ?string $branding = null
-    ) {
+        ?int             $width = null,
+        ?int             $height = null,
+        ?string          $branding = null
+    )
+    {
         $this->user = auth()->user();
 
         // Set default sizes.
@@ -112,22 +126,37 @@ class Presentation
      */
     public function save(string $filename, ?string $disk = null, bool $inRootFolder = false): string
     {
-        if (! $disk) {
+        if (!$disk) {
             $disk = config('powerpoint.output.disk', 'local');
         }
 
-        if (! $inRootFolder) {
+        // Get the file extension based on the writer type
+        $extension = $this->writerType->extension();
+
+        if (!$inRootFolder) {
             $directory = config('powerpoint.output.directory', 'ppt');
             Storage::disk($disk)->makeDirectory($directory);
 
-            $path = "$directory/$filename.pptx";
+            $path = "$directory/$filename.$extension";
         } else {
-            $path = "$filename.pptx";
+            $path = "$filename.$extension";
         }
 
         $path = Storage::disk($disk)->path($path);
 
-        $writer = IOFactory::createWriter($this->document);
+        // Create the writer with the specified type
+        $writer = IOFactory::createWriter($this->document, $this->writerType->value);
+
+        // Auto-configure PDF writer with DomPDF adapter
+        if ($this->writerType === WriterType::PDF && empty($this->writerCallback)) {
+            $writer->setPDFAdapter(new DomPDF());
+        }
+
+        // Apply custom writer configuration if provided
+        if ($this->writerCallback) {
+            ($this->writerCallback)($writer);
+        }
+
         $writer->save($path);
 
         return $path;
@@ -136,7 +165,7 @@ class Presentation
     /**
      * The slides to add to the presentation.
      *
-     * @param  array<BaseSlide>  $slides
+     * @param array<BaseSlide> $slides
      */
     public function slides(array $slides = []): static
     {
@@ -177,6 +206,43 @@ class Presentation
     public function forUser(Authenticatable $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Set the writer type to use when saving the presentation.
+     */
+    public function writer(WriterType $type): static
+    {
+        $this->writerType = $type;
+
+        return $this;
+    }
+
+    public function asPowerPoint(): static
+    {
+        return $this->writer(WriterType::PowerPoint2007);
+    }
+
+    public function asPdf(): static
+    {
+        return $this->writer(WriterType::PDF);
+    }
+
+    public function asHtml(): static
+    {
+        return $this->writer(WriterType::HTML);
+    }
+
+    /**
+     * Configure the writer with a custom callback.
+     * The callback receives the writer instance and can be used to set
+     * writer-specific options like PDF adapters or ZIP adapters.
+     */
+    public function configureWriter(callable $callback): static
+    {
+        $this->writerCallback = $callback;
 
         return $this;
     }
