@@ -50,22 +50,31 @@ class Table extends BaseSlide implements DynamicallyCreatable
             $headerCells[] = Cell::make($header)
                 ->width($columnWidth)
                 ->bold()
-                ->backgroundColor(Color::COLOR_DARKBLUE)
-                ->color(Color::COLOR_WHITE)
+                ->marginTop(2.5)
+                ->marginBottom(2.5)
                 ->alignLeft()
                 ->alignMiddle();
         }
 
         $rows[] = Row::make($headerCells)->height(40);
 
+        $rowIndex = 0;
+
         // Create data rows
         foreach ($this->data as $rowData) {
             $dataCells = [];
+            $rowIndex++;
             foreach ($rowData as $cellData) {
-                $dataCells[] = Cell::make((string) $cellData)
+                $cell = Cell::make((string) $cellData)
                     ->width($columnWidth)
                     ->alignLeft()
                     ->alignMiddle();
+
+                if($rowIndex === 1) {
+                    $cell->borderTop($this->presentation->branding->slideTheme(static::class)->textColor ?? 'ff000000', 2);
+                }
+
+                $dataCells[] = $cell;
             }
             $rows[] = Row::make($dataCells)->height(35);
         }
