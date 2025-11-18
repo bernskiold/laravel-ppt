@@ -7,14 +7,10 @@ use BernskioldMedia\LaravelPpt\Registries\Brandings;
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
 use BernskioldMedia\LaravelPpt\Support\PresentationFactory;
 use Illuminate\Console\Command;
-
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpPresentation\IOFactory;
-use function base_path;
+
 use function class_exists;
-use function is_dir;
-use function mkdir;
 use function storage_path;
 
 class GenerateSamplePresentationCommand extends Command

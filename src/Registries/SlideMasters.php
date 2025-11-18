@@ -53,7 +53,7 @@ class SlideMasters
     {
         $definition = ['class' => $class];
 
-        if(method_exists($class, 'label')) {
+        if (method_exists($class, 'label')) {
             $definition['label'] = $class::label();
         }
 
