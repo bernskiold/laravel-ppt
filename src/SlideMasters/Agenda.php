@@ -37,7 +37,7 @@ class Agenda extends BaseSlide implements DynamicallyCreatable
             TextBox::make($this, $this->slideTitle)
                 ->bold()
                 ->rotate(270)
-                ->width($this->presentation->height - 2*$this->verticalPadding)
+                ->width($this->presentation->height - 2 * $this->verticalPadding)
                 ->height(200)
                 ->centerVertically()
                 ->x($this->verticalPadding)
