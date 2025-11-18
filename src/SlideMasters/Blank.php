@@ -8,7 +8,7 @@ use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 use BernskioldMedia\LaravelPpt\Support\ComponentFactory;
 
 /**
- * @method static static make(callable|array $callbackOrComponents)
+ * @method static static make(callable|array $components)
  */
 class Blank extends BaseSlide implements DynamicallyCreatable
 {
@@ -19,16 +19,16 @@ class Blank extends BaseSlide implements DynamicallyCreatable
     /**
      * Create a blank slide.
      *
-     * @param  callable|array  $callbackOrComponents  Either a callback for custom content or an array of component definitions
+     * @param  callable|array  $components  Either a callback for custom content or an array of component definitions
      */
-    public function __construct(callable|array $callbackOrComponents = [])
+    public function __construct(callable|array $components = [])
     {
-        if (is_callable($callbackOrComponents)) {
+        if (is_callable($components)) {
             // Backward compatibility: use callback pattern
-            $this->contents = $callbackOrComponents;
+            $this->contents = $components;
         } else {
             // New pattern: use component definitions
-            $this->componentsData = $callbackOrComponents;
+            $this->componentsData = $components;
         }
     }
 

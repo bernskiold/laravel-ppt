@@ -9,7 +9,7 @@ use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 use BernskioldMedia\LaravelPpt\Support\ComponentFactory;
 
 /**
- * @method static static make(string $title, callable|array|null $callbackOrComponents = null)
+ * @method static static make(string $title, callable|array|null $components = null)
  */
 class BlankWithTitle extends BaseSlide implements DynamicallyCreatable
 {
@@ -22,20 +22,20 @@ class BlankWithTitle extends BaseSlide implements DynamicallyCreatable
      * Create a blank slide with a title.
      *
      * @param  string  $title  The slide title
-     * @param  callable|array|null  $callbackOrComponents  Either a callback for custom content or an array of component definitions
+     * @param  callable|array|null  $components  Either a callback for custom content or an array of component definitions
      */
     public function __construct(
         string $title,
-        callable|array|null $callbackOrComponents = null
+        callable|array|null $components = null
     ) {
         $this->title($title);
 
-        if (is_callable($callbackOrComponents)) {
+        if (is_callable($components)) {
             // Backward compatibility: use callback pattern
-            $this->contents = $callbackOrComponents;
-        } elseif (is_array($callbackOrComponents)) {
+            $this->contents = $components;
+        } elseif (is_array($components)) {
             // New pattern: use component definitions
-            $this->componentsData = $callbackOrComponents;
+            $this->componentsData = $components;
         }
     }
 
