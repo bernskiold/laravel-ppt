@@ -103,19 +103,24 @@ class Branding
     }
 
     /**
+     * Get a human-readable label for the branding.
+     */
+    public static function label(): string
+    {
+        return str(static::class)
+            ->classBasename()
+            ->snake(' ')
+            ->title()
+            ->toString();
+    }
+
+    /**
      * The default theme for all brandings.
+     * Override this method in your custom branding class to add a logo.
      */
     public function defaultTheme(): SlideTheme
     {
         return SlideTheme::make()
-            ->logo(
-                path: $this->assetFolderPath().'/logo.png',
-                dimensions: [
-                    'width' => 100,
-                    'height' => 50,
-                ],
-                url: $this->url(),
-            )
             ->backgroundColor(Color::COLOR_WHITE)
             ->chartBackgroundColor(Color::COLOR_WHITE)
             ->textColor(Color::COLOR_BLACK);

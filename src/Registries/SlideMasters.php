@@ -1,0 +1,178 @@
+<?php
+
+namespace BernskioldMedia\LaravelPpt\Registries;
+
+use function collect;
+use function interface_exists;
+use function is_subclass_of;
+use function method_exists;
+
+class SlideMasters
+{
+    /**
+     * Registered slide masters.
+     *
+     * Masters can be registered in a service provider's boot() method:
+     * SlideMasters::register([CustomMaster::class]);
+     *
+     * @var array<class-string>
+     */
+    public static array $masters = [];
+
+    /**
+     * Get all registered slide masters with their metadata.
+     *
+     * Returns masters that implement DynamicallyCreatable (if interface exists).
+     * Each master includes: class, key, label, description, schema, example.
+     *
+     * @return array<string, array>
+     */
+    public static function all(): array
+    {
+        return collect(static::$masters)
+            ->filter(function ($class) {
+                // Check if DynamicallyCreatable interface exists
+                if (! interface_exists('BernskioldMedia\\LaravelPpt\\Contracts\\DynamicallyCreatable')) {
+                    return true; // Return all if interface doesn't exist yet
+                }
+
+                return is_subclass_of($class, 'BernskioldMedia\\LaravelPpt\\Contracts\\DynamicallyCreatable');
+            })
+            ->mapWithKeys(fn ($class) => [
+                $class::key() => static::buildMasterDefinition($class),
+            ])
+            ->all();
+    }
+
+    /**
+     * Build master definition array with metadata.
+     *
+     * @param  class-string  $class
+     */
+    protected static function buildMasterDefinition(string $class): array
+    {
+        $definition = ['class' => $class];
+
+        if (method_exists($class, 'key')) {
+            $definition['key'] = $class::key();
+        }
+
+        if (method_exists($class, 'label')) {
+            $definition['label'] = $class::label();
+        }
+
+        // Add schema info if available (from DynamicallyCreatable interface)
+        if (method_exists($class, 'description')) {
+            $definition['description'] = $class::description();
+        }
+
+        if (method_exists($class, 'dataSchema')) {
+            $definition['schema'] = $class::dataSchema();
+        }
+
+        if (method_exists($class, 'exampleData')) {
+            $definition['example'] = $class::exampleData();
+        }
+
+        return $definition;
+    }
+
+    /**
+     * Get a specific slide master definition by its key.
+     *
+     * @param  string  $masterKey  The slide master key (e.g., 'title-subtitle')
+     */
+    public static function get(string $masterKey): ?array
+    {
+        return static::all()[$masterKey] ?? null;
+    }
+
+    /**
+     * Check if a slide master exists by its key.
+     *
+     * @param  string  $masterKey  The slide master key (e.g., 'title-subtitle')
+     */
+    public static function exists(string $masterKey): bool
+    {
+        return isset(static::all()[$masterKey]);
+    }
+
+    /**
+     * Get the class name for a slide master by its key.
+     *
+     * @param  string  $masterKey  The slide master key (e.g., 'title-subtitle')
+     * @return class-string|null
+     */
+    public static function getClass(string $masterKey): ?string
+    {
+        $master = static::get($masterKey);
+
+        return $master['class'] ?? null;
+    }
+
+    /**
+     * Get available slide master keys.
+     *
+     * @return array<string> Array of master keys (e.g., ['title', 'title-subtitle', ...])
+     */
+    public static function names(): array
+    {
+        return array_keys(static::all());
+    }
+
+    /**
+     * Register multiple slide masters at once.
+     *
+     * This is typically called in a service provider's boot() method:
+     *
+     * SlideMasters::register([
+     *     CustomMaster::class,
+     *     AnotherMaster::class,
+     * ]);
+     *
+     * @param  array<class-string>  $masters  Array of slide master class names
+     */
+    public static function register(array $masters): void
+    {
+        static::$masters = array_merge(
+            static::$masters,
+            $masters
+        );
+    }
+
+    /**
+     * Unregister one or more slide masters by class name.
+     *
+     * SlideMasters::unregister([Title::class, CustomMaster::class]);
+     *
+     * @param  array<class-string>  $classes  Array of slide master class names to remove
+     */
+    public static function unregister(array $classes): void
+    {
+        static::$masters = array_filter(
+            static::$masters,
+            fn ($class) => ! in_array($class, $classes, true)
+        );
+
+        // Re-index the array to maintain sequential numeric keys
+        static::$masters = array_values(static::$masters);
+    }
+
+    /**
+     * Get all registered master classes (raw list without metadata).
+     *
+     * @return array<class-string>
+     */
+    public static function classes(): array
+    {
+        return static::$masters;
+    }
+
+    /**
+     * Clear all registered masters (primarily for testing).
+     */
+    public static function clear(): void
+    {
+        static::$masters = [];
+    }
+}

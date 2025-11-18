@@ -30,8 +30,8 @@ return [
     ],
 
     'baseBranding' => [
-        'creatorCompanyName' => 'Bernskiold Media',
-        'websiteUrl' => 'https://bernskioldmedia.com',
+        'creatorCompanyName' => config('app.name', ''),
+        'websiteUrl' => config('app.url', ''),
         'font' => 'Arial',
         'chartColors' => [
             'ff000000',

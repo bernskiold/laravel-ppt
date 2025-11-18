@@ -219,6 +219,14 @@ class Presentation
         return $this;
     }
 
+    /**
+     * Get the current writer type.
+     */
+    public function getWriterType(): WriterType
+    {
+        return $this->writerType;
+    }
+
     public function asPowerPoint(): static
     {
         return $this->writer(WriterType::PowerPoint2007);
