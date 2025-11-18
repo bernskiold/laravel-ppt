@@ -1,6 +1,7 @@
 <?php
 
 use BernskioldMedia\LaravelPpt\Branding\Branding;
+use BernskioldMedia\LaravelPpt\Enums\WriterType;
 use BernskioldMedia\LaravelPpt\Presentation\Presentation;
 use BernskioldMedia\LaravelPpt\Registries\Brandings;
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
@@ -231,4 +232,110 @@ it('generates UUID filename when none provided', function () {
     );
 
     expect($result['filename'])->toMatch('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.pptx$/');
+});
+
+it('creates presentation with PDF writer type', function () {
+    $presentation = PresentationFactory::create(
+        title: 'Test Presentation',
+        branding: Branding::class,
+        slides: [],
+        writerType: WriterType::PDF
+    );
+
+    expect($presentation)->toBeInstanceOf(Presentation::class);
+    expect($presentation->getWriterType())->toBe(WriterType::PDF);
+});
+
+it('creates presentation with HTML writer type', function () {
+    $presentation = PresentationFactory::create(
+        title: 'Test Presentation',
+        branding: Branding::class,
+        slides: [],
+        writerType: WriterType::HTML
+    );
+
+    expect($presentation)->toBeInstanceOf(Presentation::class);
+    expect($presentation->getWriterType())->toBe(WriterType::HTML);
+});
+
+it('creates presentation with ODPresentation writer type', function () {
+    $presentation = PresentationFactory::create(
+        title: 'Test Presentation',
+        branding: Branding::class,
+        slides: [],
+        writerType: WriterType::ODPresentation
+    );
+
+    expect($presentation)->toBeInstanceOf(Presentation::class);
+    expect($presentation->getWriterType())->toBe(WriterType::ODPresentation);
+});
+
+it('saves presentation as HTML with correct extension', function () {
+    Storage::fake('local');
+
+    $presentation = PresentationFactory::create(
+        title: 'Test Presentation',
+        branding: Branding::class,
+        slides: [
+            [
+                'master' => 'Title',
+                'data' => ['title' => 'Test'],
+            ],
+        ]
+    );
+
+    $result = PresentationFactory::buildAndSave(
+        presentation: $presentation,
+        filename: 'test-presentation',
+        inRootFolder: true,
+        writerType: WriterType::HTML
+    );
+
+    expect($result['filename'])->toBe('test-presentation.html');
+    expect($result['path'])->toBe('test-presentation.html');
+    Storage::disk('local')->assertExists('test-presentation.html');
+});
+
+it('saves presentation as ODPresentation with correct extension', function () {
+    Storage::fake('local');
+
+    $presentation = PresentationFactory::create(
+        title: 'Test Presentation',
+        branding: Branding::class,
+        slides: [
+            [
+                'master' => 'Title',
+                'data' => ['title' => 'Test'],
+            ],
+        ]
+    );
+
+    $result = PresentationFactory::buildAndSave(
+        presentation: $presentation,
+        filename: 'test-presentation',
+        inRootFolder: true,
+        writerType: WriterType::ODPresentation
+    );
+
+    expect($result['filename'])->toBe('test-presentation.odp');
+    expect($result['path'])->toBe('test-presentation.odp');
+    Storage::disk('local')->assertExists('test-presentation.odp');
+});
+
+it('defaults to PowerPoint2007 when no writer type specified', function () {
+    Storage::fake('local');
+
+    $presentation = PresentationFactory::create(
+        title: 'Test Presentation',
+        branding: Branding::class,
+        slides: []
+    );
+
+    $result = PresentationFactory::buildAndSave(
+        presentation: $presentation,
+        filename: 'test-default'
+    );
+
+    expect($result['filename'])->toBe('test-default.pptx');
+    expect($result['path'])->toContain('test-default.pptx');
 });

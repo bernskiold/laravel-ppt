@@ -52,7 +52,8 @@ it('includes registered slide masters', function () {
 it('uses human-readable labels for master names', function () {
     $masters = SlideMasters::all();
 
-    expect($masters)->toHaveKey('Blank With Title');
+    // Only masters that implement DynamicallyCreatable appear in all()
+    expect($masters)->toHaveKey('Bullet Points');
     expect($masters)->toHaveKey('Chart Square');
     expect($masters)->toHaveKey('Title Subtitle');
 });

@@ -4,6 +4,7 @@ namespace BernskioldMedia\LaravelPpt\Support;
 
 use BernskioldMedia\LaravelPpt\Branding\Branding;
 use BernskioldMedia\LaravelPpt\Contracts\DynamicallyCreatable;
+use BernskioldMedia\LaravelPpt\Enums\WriterType;
 use BernskioldMedia\LaravelPpt\Presentation\Presentation;
 use BernskioldMedia\LaravelPpt\Registries\Brandings;
 use BernskioldMedia\LaravelPpt\Registries\SlideMasters;
@@ -21,6 +22,7 @@ class PresentationFactory
      * @param  array  $slides  Array of slide configurations, each with 'master' (label or FQCN) and 'data' keys
      * @param  int|null  $width  Presentation width in pixels
      * @param  int|null  $height  Presentation height in pixels
+     * @param  WriterType|null  $writerType  Output format type (default: PowerPoint2007)
      *
      * @throws InvalidArgumentException
      */
@@ -29,7 +31,8 @@ class PresentationFactory
         string $branding,
         array $slides,
         ?int $width = null,
-        ?int $height = null
+        ?int $height = null,
+        ?WriterType $writerType = null
     ): Presentation {
         // Resolve branding: try registry first, then treat as class name
         $brandingClass = static::resolveBranding($branding);
@@ -41,6 +44,11 @@ class PresentationFactory
             height: $height,
             branding: $brandingClass
         );
+
+        // Set writer type if provided
+        if ($writerType !== null) {
+            $presentation->writer($writerType);
+        }
 
         // Add each slide
         foreach ($slides as $index => $slideConfig) {
@@ -90,6 +98,7 @@ class PresentationFactory
      * @param  string  $disk  Primary disk to save file to (default: 'local')
      * @param  string  $directory  Directory path on disk (default: 'ppt')
      * @param  bool  $inRootFolder  Save in root folder of disk (default: false)
+     * @param  WriterType|null  $writerType  Output format type (default: uses presentation's current writer type)
      * @return array File information with keys: filename, path, disk
      */
     public static function buildAndSave(
@@ -97,25 +106,35 @@ class PresentationFactory
         ?string $filename = null,
         string $disk = 'local',
         string $directory = 'ppt',
-        bool $inRootFolder = false
+        bool $inRootFolder = false,
+        ?WriterType $writerType = null
     ): array {
         $filename = $filename ?? (string) Str::uuid();
+
+        // Set writer type if provided
+        if ($writerType !== null) {
+            $presentation->writer($writerType);
+        }
 
         // Build the presentation
         $presentation->create();
 
+        // Get the file extension based on the writer type
+        $extension = $presentation->getWriterType()->extension();
+        $filenameWithExtension = "$filename.$extension";
+
         // Determine the path
         if ($inRootFolder) {
-            $relativePath = "{$filename}.pptx";
+            $relativePath = $filenameWithExtension;
         } else {
-            $relativePath = "{$directory}/{$filename}.pptx";
+            $relativePath = "{$directory}/{$filenameWithExtension}";
         }
 
         // Save using the Presentation's save method
         $absolutePath = $presentation->save($filename, $disk, $inRootFolder);
 
         return [
-            'filename' => "{$filename}.pptx",
+            'filename' => $filenameWithExtension,
             'path' => $relativePath,
             'absolute_path' => $absolutePath,
             'disk' => $disk,
@@ -128,20 +147,23 @@ class PresentationFactory
      * @param  string  $branding  Branding name from BrandingRegistry or fully qualified class name
      * @param  array  $presentationOptions  Optional: width, height
      * @param  array  $saveOptions  Optional: filename, disk, directory, inRootFolder
+     * @param  WriterType|null  $writerType  Output format type (default: PowerPoint2007)
      */
     public static function createAndSave(
         string $title,
         string $branding,
         array $slides,
         array $presentationOptions = [],
-        array $saveOptions = []
+        array $saveOptions = [],
+        ?WriterType $writerType = null
     ): array {
         $presentation = static::create(
             title: $title,
             branding: $branding,
             slides: $slides,
             width: $presentationOptions['width'] ?? null,
-            height: $presentationOptions['height'] ?? null
+            height: $presentationOptions['height'] ?? null,
+            writerType: $writerType
         );
 
         return static::buildAndSave(
@@ -149,7 +171,8 @@ class PresentationFactory
             filename: $saveOptions['filename'] ?? null,
             disk: $saveOptions['disk'] ?? 'local',
             directory: $saveOptions['directory'] ?? 'ppt',
-            inRootFolder: $saveOptions['inRootFolder'] ?? false
+            inRootFolder: $saveOptions['inRootFolder'] ?? false,
+            writerType: $writerType
         );
     }
 
