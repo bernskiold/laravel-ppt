@@ -37,10 +37,18 @@ class SlideFactory
         $args = [];
         foreach ($params as $param) {
             $paramName = $param->getName();
-            $paramType = $param->getType()?->getName();
+            $reflectionType = $param->getType();
+
+            // Get type name, handling union types
+            $paramType = null;
+            if ($reflectionType instanceof \ReflectionNamedType) {
+                $paramType = $reflectionType->getName();
+            }
+            // For union types (e.g., callable|array), we can't get a single type name
+            // so we'll just leave $paramType as null and skip type-specific handling
 
             // Special handling for ChartComponent parameters
-            if ($paramType === ChartComponent::class || is_subclass_of($paramType, ChartComponent::class)) {
+            if ($paramType && ($paramType === ChartComponent::class || is_subclass_of($paramType, ChartComponent::class))) {
                 // Handle multiple chart parameters using naming convention
                 // e.g., leftChart -> leftChartType + leftChartData
                 $chartTypeKey = $paramName.'Type';
