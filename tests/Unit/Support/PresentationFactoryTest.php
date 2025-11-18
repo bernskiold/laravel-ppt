@@ -48,14 +48,14 @@ beforeEach(function () {
 
     // Register a test branding
     Brandings::register([
-        'TestBrand' => Branding::class,
+        Branding::class,
     ]);
 });
 
 it('creates presentation with branding from registry', function () {
     $presentation = PresentationFactory::create(
         title: 'Test Presentation',
-        branding: 'TestBrand',
+        branding: 'Branding',
         slides: []
     );
 

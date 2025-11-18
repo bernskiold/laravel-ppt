@@ -58,31 +58,20 @@ class Brandings
      * This is typically called in a service provider's boot() method:
      *
      * Brandings::register([
-     *     'MyBrand' => MyBranding::class,
-     *     'AnotherBrand' => AnotherBranding::class,
-     * ]);
-     *
-     * Or with class-only format (uses label() method):
-     *
-     * Brandings::register([
      *     MyBranding::class,
      *     AnotherBranding::class,
      * ]);
      *
-     * @param  array<string, class-string>|array<class-string>  $brandings  Map of names to class names, or array of class names
+     * The label() method on each class will be used as the registry key.
+     *
+     * @param  array<class-string>  $brandings  Array of branding class names
      */
     public static function register(array $brandings): void
     {
-        // Normalize to associative array format
+        // Convert class names to label => class format
         $normalized = [];
-        foreach ($brandings as $key => $value) {
-            // If key is numeric, it's class-only format - use label() method
-            if (is_numeric($key)) {
-                $normalized[$value::label()] = $value;
-            } else {
-                // It's already key => class format
-                $normalized[$key] = $value;
-            }
+        foreach ($brandings as $class) {
+            $normalized[$class::label()] = $class;
         }
 
         static::$brandings = array_merge(

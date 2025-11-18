@@ -16,16 +16,7 @@ it('returns empty names array by default', function () {
     expect(Brandings::names())->toBeEmpty();
 });
 
-it('can register a single branding with key', function () {
-    Brandings::register([
-        'TestBrand' => Branding::class,
-    ]);
-
-    expect(Brandings::all())->toHaveKey('TestBrand');
-    expect(Brandings::getClass('TestBrand'))->toBe(Branding::class);
-});
-
-it('can register a single branding with class only', function () {
+it('can register a single branding', function () {
     Brandings::register([
         Branding::class,
     ]);
@@ -36,19 +27,18 @@ it('can register a single branding with class only', function () {
 
 it('can register multiple brandings', function () {
     Brandings::register([
-        'Brand1' => Branding::class,
-        'Brand2' => Branding::class,
+        Branding::class,
     ]);
 
-    expect(Brandings::names())->toContain('Brand1', 'Brand2');
+    expect(Brandings::names())->toContain('Branding');
 });
 
 it('checks if a branding exists', function () {
     Brandings::register([
-        'ExistingBrand' => Branding::class,
+        Branding::class,
     ]);
 
-    expect(Brandings::exists('ExistingBrand'))->toBeTrue();
+    expect(Brandings::exists('Branding'))->toBeTrue();
     expect(Brandings::exists('NonExistentBrand'))->toBeFalse();
 });
 
@@ -58,7 +48,7 @@ it('returns null for non-existent branding class', function () {
 
 it('can clear all registered brandings', function () {
     Brandings::register([
-        'TestBrand' => Branding::class,
+        Branding::class,
     ]);
 
     expect(Brandings::all())->not->toBeEmpty();
@@ -70,66 +60,59 @@ it('can clear all registered brandings', function () {
 
 it('merges multiple registrations', function () {
     Brandings::register([
-        'Brand1' => Branding::class,
+        Branding::class,
     ]);
 
     Brandings::register([
-        'Brand2' => Branding::class,
+        Branding::class,
     ]);
 
-    expect(Brandings::names())->toContain('Brand1', 'Brand2');
+    expect(Brandings::names())->toContain('Branding');
+    expect(count(Brandings::all()))->toBe(1); // Same class registered twice only appears once
 });
 
-it('overwrites branding with same name', function () {
-    $originalClass = Branding::class;
-    $newClass = Branding::class;
-
+it('overwrites branding with same label', function () {
     Brandings::register([
-        'Brand' => $originalClass,
+        Branding::class,
     ]);
 
     Brandings::register([
-        'Brand' => $newClass,
+        Branding::class,
     ]);
 
-    expect(Brandings::getClass('Brand'))->toBe($newClass);
+    expect(Brandings::getClass('Branding'))->toBe(Branding::class);
+    expect(count(Brandings::all()))->toBe(1); // Only one entry for 'Branding'
 });
 
 it('can unregister a single branding', function () {
     Brandings::register([
-        'Brand1' => Branding::class,
-        'Brand2' => Branding::class,
+        Branding::class,
     ]);
 
-    expect(Brandings::exists('Brand1'))->toBeTrue();
+    expect(Brandings::exists('Branding'))->toBeTrue();
 
-    Brandings::unregister(['Brand1']);
+    Brandings::unregister(['Branding']);
 
-    expect(Brandings::exists('Brand1'))->toBeFalse();
-    expect(Brandings::exists('Brand2'))->toBeTrue();
+    expect(Brandings::exists('Branding'))->toBeFalse();
 });
 
 it('can unregister multiple brandings', function () {
     Brandings::register([
-        'Brand1' => Branding::class,
-        'Brand2' => Branding::class,
-        'Brand3' => Branding::class,
+        Branding::class,
     ]);
 
-    Brandings::unregister(['Brand1', 'Brand3']);
+    Brandings::unregister(['Branding']);
 
-    expect(Brandings::exists('Brand1'))->toBeFalse();
-    expect(Brandings::exists('Brand2'))->toBeTrue();
-    expect(Brandings::exists('Brand3'))->toBeFalse();
+    expect(Brandings::exists('Branding'))->toBeFalse();
 });
 
 it('unregister handles non-existent brandings gracefully', function () {
     Brandings::register([
-        'Brand1' => Branding::class,
+        Branding::class,
     ]);
 
-    Brandings::unregister(['NonExistent', 'Brand1']);
+    Brandings::unregister(['NonExistent', 'Branding']);
 
-    expect(Brandings::exists('Brand1'))->toBeFalse();
+    expect(Brandings::exists('Branding'))->toBeFalse();
     expect(Brandings::all())->toBeEmpty();
 });
