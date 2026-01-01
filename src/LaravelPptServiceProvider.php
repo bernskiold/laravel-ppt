@@ -38,7 +38,7 @@ class LaravelPptServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-ppt')
             ->hasConfigFile('powerpoint')
-            ->hasConsoleCommands([
+            ->hasCommands([
                 CreateNewSlideDeckCommand::class,
                 CreateNewSlideCommand::class,
                 GenerateSamplePresentationCommand::class,
