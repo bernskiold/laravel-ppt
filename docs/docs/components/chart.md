@@ -156,6 +156,36 @@ All chart components have a set of common methods that can be used to customize 
 these at the end of this page.
 :::
 
+## Doughnut Chart
+
+The doughnut chart component draws a ring divided into slices: progress against a target, or a whole and its parts. It
+draws one series. Each slice takes its colour from the series' `colors`, by position, and falls back to the branding's
+chart colours in the same order.
+
+```php
+Blank::make(function(Blank $slide) {
+    ChartShape::make($slide, Doughnut::make([
+        [
+            'label' => 'Progress',
+            'data' => ['Done' => 85, 'Left' => 15],
+            'colors' => ['ff7c6cf2', 'ffd9d9d9'],
+        ],
+    ])->holeSize(70));
+});
+```
+
+You can customize the doughnut chart using the following methods:
+
+- `holeSize(int $holeSize)` - Sets how much of the ring is hole, in per cent, from 10 to 90.
+
+The values are hidden by default, because a doughnut is usually read with its figure written in the hole.
+`withDataValues()` shows them again.
+
+:::note Common component appearance methods
+All chart components have a set of common methods that can be used to customize the appearance of the chart. You'll find
+these at the end of this page.
+:::
+
 ## Common Chart Customization Methods
 
 The following methods are available on all chart components:
@@ -164,8 +194,8 @@ You can customize the bar chart using the following methods:
 
 - `withDataLabels()` - Sets the chart to display labels for each data point
 - `withoutDataLabels()` - Sets the chart to not display labels for each data point
-- `showDataValues()` - Sets the chart to display the value of each data point
-- `hideDataValues()` - Sets the chart to not display the value of each data point
+- `withDataValues()` - Sets the chart to display the value of each data point
+- `withoutDataValues()` - Sets the chart to not display the value of each data point
 - `withLegend()` - Sets the chart to display a legend
 - `withoutLegend()` - Sets the chart to not display a legend
 - `xAxisTitle(string $title)` - Sets the title of the x-axis.
@@ -174,3 +204,18 @@ You can customize the bar chart using the following methods:
 - `withoutXAxis()` - Sets the chart to not display the x-axis.
 - `withYAxis()` - Sets the chart to display the y-axis.
 - `withoutYAxis()` - Sets the chart to not display the y-axis.
+
+### Data label options per series
+
+When you give a chart its data as series, each series can also set how its data labels look:
+
+- `labelFormat` - A number format for the labels, such as `'0.0'` or `'#,##0'`.
+- `dataLabelBold` - Whether the labels are bold. Labels are bold by default.
+- `dataLabelSize` - The font size of the labels.
+
+```php
+Column::make([
+    ['label' => 'Revenue', 'data' => ['2025' => 12.4, '2026' => 13.1], 'labelFormat' => '0.0', 'dataLabelSize' => 9],
+]);
+```
+

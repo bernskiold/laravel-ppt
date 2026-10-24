@@ -47,6 +47,36 @@ Blank::make(function (Blank $slide) {
 });
 ```
 
+## Adding a rich text box
+
+The rich text box holds paragraphs in which each run can have its own formatting, such as a bold name ahead of plain
+text. A paragraph is a string or a list of `TextPart`s. Each run falls back to the box's size, colour and font.
+
+```php
+use BernskioldMedia\LaravelPpt\Components\RichTextBox;
+use BernskioldMedia\LaravelPpt\Components\TextPart;
+use BernskioldMedia\LaravelPpt\SlideMasters\Blank;
+
+Blank::make(function (Blank $slide) {
+    RichTextBox::make($slide, [
+        [TextPart::make('Lisa Materazzo')->bold(), TextPart::make(', CMO, left the company.')],
+        'Pete Zillig is on leave.',
+    ])
+        ->bulleted()
+        ->size(10)
+        ->position(40, 120)
+        ->width(400)
+        ->height(200)
+        ->render();
+});
+```
+
+The rich text box has these methods in addition to the ones below:
+
+- `bulleted(bool $bulleted = true, string $character = '•')`: Set the paragraphs as a bulleted list.
+- `bulletColor(string $color)`: Set the colour of the bullets (in ARGB format).
+- `spacingAfter(int $points)`: Set the space after each paragraph (in points).
+
 ## Customizing text boxes
 
 Both text boxes and multi-text boxes support the following methods:
@@ -76,6 +106,7 @@ Both text boxes and multi-text boxes support the following methods:
 
 - `size(int $size)`: Set the font size (in pixels).
 - `bold(bool $bold = true)`: Set the font weight to bold.
+- `italic(bool $italic = true)`: Set the text to italic.
 - `color(string $color)`: Set the font color (in ARGB format).
 - `uppercase(bool $uppercase = true)`: Set the text to uppercase.
 - `underlined(bool $underlined = true)`: Set the text to underlined.
@@ -95,7 +126,7 @@ Both text boxes and multi-text boxes support the following methods:
 
 ## Text Parts
 
-Text parts are used in the multi-text box. They can be used to set the text, as well some formatting options.
+Text parts are used in the multi-text box, the rich text box and table cells. They can be used to set the text, as well some formatting options.
 
 ```php
 TextPart::make('This is the first paragraph')
@@ -107,6 +138,7 @@ The following methods are available on text parts:
 
 - `size(int $size)`: Set the font size (in pixels).
 - `bold(bool $bold = true)`: Set the font weight to bold.
+- `italic(bool $italic = true)`: Set the text to italic.
 - `color(string $color)`: Set the font color (in ARGB format).
 - `uppercase(bool $uppercase = true)`: Set the text to uppercase.
 - `underlined(bool $underlined = true)`: Set the text to underlined.

@@ -8,21 +8,21 @@ trait WithPosition
 
     public float $y = 0;
 
-    public function x(float $x): self
+    public function x(float $x): static
     {
         $this->x = $x;
 
         return $this;
     }
 
-    public function y(float $y): self
+    public function y(float $y): static
     {
         $this->y = $y;
 
         return $this;
     }
 
-    public function position(float $x, float $y): self
+    public function position(float $x, float $y): static
     {
         $this->x($x);
         $this->y($y);

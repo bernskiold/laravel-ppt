@@ -70,12 +70,20 @@ abstract class ChartComponent extends Component
                 $series->setLabelPosition($seriesData['labelPosition']);
             }
 
+            if (isset($seriesData['labelFormat'])) {
+                $series->setDlblNumFormat($seriesData['labelFormat']);
+            }
+
             $dataLabelColor = $seriesData['dataLabelColor'] ?? 'ffffffff';
 
             $series->getFont()
                 ->setName($this->slide->presentation->branding->baseFont())
                 ->setColor(new Color($dataLabelColor))
-                ->setBold(true);
+                ->setBold($seriesData['dataLabelBold'] ?? true);
+
+            if (isset($seriesData['dataLabelSize'])) {
+                $series->getFont()->setSize((int) $seriesData['dataLabelSize']);
+            }
 
             $this->chartTypeSeriesData($series, $index, $seriesData);
 

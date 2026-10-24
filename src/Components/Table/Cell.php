@@ -2,6 +2,7 @@
 
 namespace BernskioldMedia\LaravelPpt\Components\Table;
 
+use BernskioldMedia\LaravelPpt\Components\TextPart;
 use BernskioldMedia\LaravelPpt\Concerns\Makeable;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithAlignment;
 use BernskioldMedia\LaravelPpt\Concerns\Slides\WithBackgroundColor;
@@ -27,9 +28,25 @@ class Cell
 
     public int $width = 0;
 
+    /**
+     * Runs of text with formatting of their own — a bold name ahead of plain
+     * text — in place of the cell's single run. Each run falls back to the
+     * cell's, the row's and the table's size, colour and font.
+     *
+     * @var array<int, TextPart>
+     */
+    public array $parts = [];
+
     public function __construct(
         public string $text = ''
     ) {}
+
+    public function parts(TextPart ...$parts): self
+    {
+        $this->parts = array_values($parts);
+
+        return $this;
+    }
 
     public function spansColumns(int $colspan): self
     {

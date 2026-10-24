@@ -14,6 +14,8 @@ trait WithFontSettings
 
     public bool $bold = false;
 
+    public bool $italic = false;
+
     public bool $underlined = false;
 
     public int $lineHeight = 100;
@@ -44,6 +46,13 @@ trait WithFontSettings
     public function bold(bool $bold = true): static
     {
         $this->bold = $bold;
+
+        return $this;
+    }
+
+    public function italic(bool $italic = true): static
+    {
+        $this->italic = $italic;
 
         return $this;
     }

@@ -8,14 +8,14 @@ trait WithSize
 
     public ?int $height = null;
 
-    public function width(int $width): self
+    public function width(int $width): static
     {
         $this->width = $width;
 
         return $this;
     }
 
-    public function height(int $height): self
+    public function height(int $height): static
     {
         $this->height = $height;
 
