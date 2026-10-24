@@ -16,6 +16,7 @@ jobs:
         php: [8.2, 8.3, 8.4]
         laravel: [11.*, 12.*, 13.*]
         stability: [prefer-stable]
+        phppresentation: [upstream]
         include:
           - laravel: 11.*
             testbench: 9.*
@@ -23,11 +24,18 @@ jobs:
             testbench: 10.*
           - laravel: 13.*
             testbench: 11.*
+          # Sections and other additions only exist in our fork.
+          - os: ubuntu-latest
+            php: 8.4
+            laravel: 13.*
+            testbench: 11.*
+            stability: prefer-stable
+            phppresentation: fork
         exclude:
           - laravel: 13.*
             php: 8.2
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }} - PHPPresentation ${{ matrix.phppresentation }}
 
     steps:
       - name: Checkout code
@@ -44,6 +52,12 @@ jobs:
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Use the PHPPresentation fork
+        if: matrix.phppresentation == 'fork'
+        run: |
+          composer config repositories.phppresentation vcs https://github.com/bernskiold/PHPPresentation
+          composer require "phpoffice/phppresentation:dev-master as 1.3.0" --no-interaction --no-update
 
       - name: Install dependencies
         run: |

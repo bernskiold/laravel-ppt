@@ -205,10 +205,17 @@ class Presentation
      * PowerPoint keeps every slide in a section once a deck has any, so the
      * slides added before the first are put in a section of their own.
      *
+     * Sections need a PHPPresentation that has them, such as our fork. With
+     * one that does not, the slides are added without them.
+     *
      * @param  array<BaseSlide|PresentationSlide>  $slides
      */
     public function section(string $name, array $slides = []): static
     {
+        if (! static::supportsSections()) {
+            return $this->slides($slides);
+        }
+
         if ($this->currentSection === null && $this->document->getSlideCount() > 0) {
             $this->document->createSection(static::DEFAULT_SECTION)
                 ->setSlides($this->document->getAllSlides());
@@ -217,6 +224,14 @@ class Presentation
         $this->currentSection = $this->document->createSection($name);
 
         return $this->slides($slides);
+    }
+
+    /**
+     * Whether the installed PHPPresentation can write sections.
+     */
+    public static function supportsSections(): bool
+    {
+        return method_exists(PhpPresentation::class, 'createSection');
     }
 
     /**

@@ -244,4 +244,6 @@ return Presentation::make(
 
 A section runs until the next one starts, so any slide added after `section()`, through `slides()` or `addSlide()`, joins it. PowerPoint keeps every slide in a section once a deck has any, so slides added before the first section are put in one called "Default Section", as PowerPoint names it.
 
+Sections need a PHPPresentation that has them, such as [our fork](installation.md#recommended-our-phppresentation-fork). With upstream PHPPresentation, `section()` adds the slides without sections, and `Presentation::supportsSections()` tells you which you have.
+
 Sections are written to PowerPoint files only. A PDF or HTML export has none.

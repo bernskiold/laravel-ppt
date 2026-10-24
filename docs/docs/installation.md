@@ -11,9 +11,16 @@ You can install the package via composer:
 composer require bernskioldmedia/laravel-ppt
 ```
 
-The package is built on our fork of PHPPresentation, which adds what the package needs, such as sections. Composer reads repositories from your application's `composer.json` only, so add the fork there before you require the package:
+The package works with PHPPresentation 1.2 and later, as Composer installs it.
+
+### Recommended: our PHPPresentation fork
+
+Our fork of PHPPresentation adds features the package uses where they exist, such as [sections](slide-decks.md#sections). Composer reads repositories from your application's `composer.json` only, so add the fork there and require it:
 
 ```json
+"require": {
+    "phpoffice/phppresentation": "dev-master as 1.3.0"
+},
 "repositories": [
     {
         "type": "vcs",
@@ -21,6 +28,8 @@ The package is built on our fork of PHPPresentation, which adds what the package
     }
 ]
 ```
+
+The fork has no tagged release yet. The alias tells Composer to accept its `master` branch as version 1.3.0, and your lock file pins the exact commit.
 
 You can publish the config file with:
 

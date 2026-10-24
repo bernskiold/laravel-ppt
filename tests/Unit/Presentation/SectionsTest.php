@@ -26,7 +26,7 @@ it('adds no sections unless asked', function () {
         ->slides([blankSlide(), blankSlide()]);
 
     expect($presentation->document->getAllSections())->toBe([]);
-});
+})->skip(! Presentation::supportsSections(), 'Needs a PHPPresentation with sections.');
 
 it('puts the slides before the first section in a default one', function () {
     $presentation = Presentation::make('Test', branding: Branding::class)
@@ -45,14 +45,14 @@ it('puts the slides before the first section in a default one', function () {
     expect($document->getSectionOf($document->getSlide(1))->getName())->toBe(Presentation::DEFAULT_SECTION)
         ->and($document->getSectionOf($document->getSlide(2))->getName())->toBe('Ford')
         ->and($document->getSectionOf($document->getSlide(5))->getName())->toBe('Coca-Cola');
-});
+})->skip(! Presentation::supportsSections(), 'Needs a PHPPresentation with sections.');
 
 it('starts with no default section when the deck opens on one', function () {
     $presentation = Presentation::make('Test', branding: Branding::class)
         ->section('Ford', [blankSlide()]);
 
     expect(sectionSizes($presentation))->toBe(['Ford' => 1]);
-});
+})->skip(! Presentation::supportsSections(), 'Needs a PHPPresentation with sections.');
 
 it('adds the slides that follow a section to it', function () {
     $presentation = Presentation::make('Test', branding: Branding::class)
@@ -67,7 +67,7 @@ it('adds the slides that follow a section to it', function () {
         'Coca-Cola' => 0,
         'Google' => 1,
     ]);
-});
+})->skip(! Presentation::supportsSections(), 'Needs a PHPPresentation with sections.');
 
 it('writes the sections into the deck', function () {
     Storage::fake('local');
@@ -100,4 +100,14 @@ it('writes the sections into the deck', function () {
         'Default Section' => ['256'],
         'Johnson & Johnson' => ['257', '258'],
     ]);
-});
+})->skip(! Presentation::supportsSections(), 'Needs a PHPPresentation with sections.');
+
+it('adds the slides without sections when PHPPresentation has none', function () {
+    $presentation = Presentation::make('Test', branding: Branding::class)
+        ->slides([blankSlide()])
+        ->section('Ford', [blankSlide(), blankSlide()])
+        ->addSlide(blankSlide());
+
+    expect($presentation->document->getSlideCount())->toBe(4);
+})->skip(Presentation::supportsSections(), 'Needs a PHPPresentation without sections.');
+
