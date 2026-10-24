@@ -110,4 +110,3 @@ it('adds the slides without sections when PHPPresentation has none', function ()
 
     expect($presentation->document->getSlideCount())->toBe(4);
 })->skip(Presentation::supportsSections(), 'Needs a PHPPresentation without sections.');
-
