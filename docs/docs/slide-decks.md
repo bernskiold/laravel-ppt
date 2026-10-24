@@ -220,3 +220,28 @@ class MyPresentation extends SlideDeck
 You can mix and match slide masters and slide classes in the same presentation. It can be helpful to keep simpler slides
 using slide masters right in the slides array, and then move more complex slides to their own classes.
 :::
+
+## Sections
+
+PowerPoint can group slides into named sections in its slide pane. Start one with `section()`, passing the slides it holds:
+
+```php
+return Presentation::make(
+    title: 'Quarterly Review'
+)
+    ->slides([
+        Title::make('Q3 Review'),
+    ])
+    ->section('Ford', [
+        Title::make('Ford'),
+        BulletPoints::make('Highlights', ['Revenue up', 'Two new markets']),
+    ])
+    ->section('Coca-Cola', [
+        Title::make('Coca-Cola'),
+    ])
+    ->create();
+```
+
+A section runs until the next one starts, so any slide added after `section()`, through `slides()` or `addSlide()`, joins it. PowerPoint keeps every slide in a section once a deck has any, so slides added before the first section are put in one called "Default Section", as PowerPoint names it.
+
+Sections are written to PowerPoint files only. A PDF or HTML export has none.

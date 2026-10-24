@@ -11,6 +11,17 @@ You can install the package via composer:
 composer require bernskioldmedia/laravel-ppt
 ```
 
+The package is built on our fork of PHPPresentation, which adds what the package needs, such as sections. Composer reads repositories from your application's `composer.json` only, so add the fork there before you require the package:
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/bernskiold/PHPPresentation"
+    }
+]
+```
+
 You can publish the config file with:
 
 ```bash
