@@ -17,6 +17,7 @@ use PhpOffice\PhpPresentation\DocumentLayout;
 use PhpOffice\PhpPresentation\Exception\OutOfBoundsException;
 use PhpOffice\PhpPresentation\IOFactory;
 use PhpOffice\PhpPresentation\PhpPresentation;
+use PhpOffice\PhpPresentation\Section;
 use PhpOffice\PhpPresentation\Writer\PDF\DomPDF;
 
 use function config;
@@ -57,6 +58,16 @@ class Presentation
      * Custom configuration callback for the writer.
      */
     protected ?Closure $writerCallback = null;
+
+    /**
+     * The section slides are added to, once one has been started.
+     */
+    protected ?Section $currentSection = null;
+
+    /**
+     * The name PowerPoint gives the section holding the slides before the first.
+     */
+    public const DEFAULT_SECTION = 'Default Section';
 
     public function __construct(
         protected string $title,
@@ -169,11 +180,7 @@ class Presentation
     public function slides(array $slides = []): static
     {
         foreach ($slides as $slide) {
-            if ($slide instanceof PresentationSlide) {
-                $slide()->create($this);
-            } else {
-                $slide->create($this);
-            }
+            $this->addSlide($slide instanceof PresentationSlide ? $slide() : $slide);
         }
 
         return $this;
@@ -184,9 +191,32 @@ class Presentation
      */
     public function addSlide(BaseSlide $slide): static
     {
-        $slide->create($this);
+        $created = $slide->create($this);
+
+        $this->currentSection?->addSlide($created);
 
         return $this;
+    }
+
+    /**
+     * Start a section, as PowerPoint shows them in its slide pane, and add any
+     * slides given. Every slide added after it joins it until the next starts.
+     *
+     * PowerPoint keeps every slide in a section once a deck has any, so the
+     * slides added before the first are put in a section of their own.
+     *
+     * @param  array<BaseSlide|PresentationSlide>  $slides
+     */
+    public function section(string $name, array $slides = []): static
+    {
+        if ($this->currentSection === null && $this->document->getSlideCount() > 0) {
+            $this->document->createSection(static::DEFAULT_SECTION)
+                ->setSlides($this->document->getAllSlides());
+        }
+
+        $this->currentSection = $this->document->createSection($name);
+
+        return $this->slides($slides);
     }
 
     /**
