@@ -79,12 +79,30 @@ are available:
 
 - `size(int $size)`: Set the font size (in pixels).
 - `bold(bool $bold = true)`: Set the font weight to bold.
+- `italic(bool $italic = true)`: Set the text to italic.
 - `color(string $color)`: Set the font color (in ARGB format).
 - `uppercase(bool $uppercase = true)`: Set the text to uppercase.
 - `underlined(bool $underlined = true)`: Set the text to underlined.
 - `letterSpacing(int $spacing)`: Set the letter spacing (in pixels).
 - `font(string $font)`: Set the font family.
 - `lineHeight(int $height)`: Set the line height (in pixels).
+
+To give a cell runs with their own formatting, such as a bold name ahead of plain text, pass
+[text parts](/components/text#text-parts) in place of the cell's text. Each run falls back to the cell's, the row's and
+the table's size, colour and font:
+
+- `parts(TextPart ...$parts)`: Write the cell as these runs.
+
+```php
+Cell::make()->parts(
+    TextPart::make('Budget')->bold(),
+    TextPart::make(' pressure in some regions'),
+);
+```
+
+A side with no border set still draws a hairline in PowerPoint. To draw no line there at all:
+
+- `withoutBorders(bool $hide = true)`: Draw no border on any side that has no border set.
 
 Additionally, you can link the cell:
 
