@@ -1,5 +1,6 @@
 <?php
 
+use BernskioldMedia\LaravelPpt\Presentation\BaseSlide;
 use BernskioldMedia\LaravelPpt\SlideMasters\BulletPoints;
 use BernskioldMedia\LaravelPpt\SlideMasters\Chart;
 use BernskioldMedia\LaravelPpt\SlideMasters\ChartTitle;
@@ -164,7 +165,7 @@ it('throws exception for non-dynamically-creatable slide', function () {
         'title' => 'Test',
     ];
 
-    SlideFactory::create(\BernskioldMedia\LaravelPpt\Presentation\BaseSlide::class, $data);
+    SlideFactory::create(BaseSlide::class, $data);
 })->throws(InvalidArgumentException::class, 'does not implement DynamicallyCreatable interface');
 
 it('throws exception when chart data is missing', function () {
