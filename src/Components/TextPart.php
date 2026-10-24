@@ -20,6 +20,11 @@ class TextPart implements GeneratesTextRun
         protected string $text = ''
     ) {}
 
+    public function text(): string
+    {
+        return $this->text;
+    }
+
     public function toTextRun(Component $component): Run
     {
         $underlined = $this->underlined ?? $component->underlined ?? false;
@@ -34,6 +39,7 @@ class TextPart implements GeneratesTextRun
             ->setSize($this->size ?? $component->size)
             ->setColor(new Color($this->color ?? $component->color))
             ->setBold($this->bold ?? $component->bold)
+            ->setItalic($this->italic)
             ->setUnderline($underlined ? Font::UNDERLINE_SINGLE : Font::UNDERLINE_NONE)
             ->setName($this->font ?? $component->font ?? $component->slide->presentation->branding->baseFont())
             ->setCharacterSpacing($this->letterSpacing ?? $component->letterSpacing);

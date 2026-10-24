@@ -64,14 +64,21 @@ class Table extends Component
                 $color = $cell->color ?? $row->color ?? $this->color ?? Color::COLOR_BLACK;
                 $font = $cell->font ?? $row->font ?? $this->font ?? config('powerpoint.baseBranding.font');
 
-                $tableCell->createTextRun($cell->text)
-                    ->getFont()
-                    ->setSize($fontSize)
-                    ->setColor(new Color($color))
-                    ->setBold($cell->bold)
-                    ->setUnderline($cell->underlined ? Font::UNDERLINE_SINGLE : Font::UNDERLINE_NONE)
-                    ->setName($font)
-                    ->setCharacterSpacing($cell->letterSpacing);
+                $runs = $cell->parts === []
+                    ? [[$cell->text, $cell]]
+                    : array_map(fn ($part): array => [$part->text(), $part], $cell->parts);
+
+                foreach ($runs as [$text, $style]) {
+                    $tableCell->createTextRun($text)
+                        ->getFont()
+                        ->setSize($style->size ?? $fontSize)
+                        ->setColor(new Color($style->color ?? $color))
+                        ->setBold($style->bold || $cell->bold)
+                        ->setItalic($style->italic || $cell->italic)
+                        ->setUnderline($style->underlined || $cell->underlined ? Font::UNDERLINE_SINGLE : Font::UNDERLINE_NONE)
+                        ->setName($style->font ?? $font)
+                        ->setCharacterSpacing($style->letterSpacing ?: $cell->letterSpacing);
+                }
 
                 $tableCell->getActiveParagraph()
                     ->getAlignment()

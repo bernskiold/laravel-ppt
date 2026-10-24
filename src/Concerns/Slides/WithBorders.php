@@ -2,6 +2,7 @@
 
 namespace BernskioldMedia\LaravelPpt\Concerns\Slides;
 
+use PhpOffice\PhpPresentation\Style\Border;
 use PhpOffice\PhpPresentation\Style\Borders;
 use PhpOffice\PhpPresentation\Style\Color;
 use PhpOffice\PhpPresentation\Style\Fill;
@@ -31,6 +32,19 @@ trait WithBorders
     public string $leftBorderType = Fill::FILL_SOLID;
 
     public float $leftBorderSize = 0;
+
+    /**
+     * Whether a side nobody set a border on draws none at all, rather than the
+     * hairline a zero-width line still is in PowerPoint.
+     */
+    public bool $hidesUnsetBorders = false;
+
+    public function withoutBorders(bool $hide = true): static
+    {
+        $this->hidesUnsetBorders = $hide;
+
+        return $this;
+    }
 
     public function borderTop(string $color, float $size = 1.0, string $type = Fill::FILL_SOLID): static
     {
@@ -87,6 +101,19 @@ trait WithBorders
         $borders->getLeft()
             ->setLineWidth($this->leftBorderSize)
             ->setColor(new Color($this->leftBorderColor));
+
+        if ($this->hidesUnsetBorders) {
+            foreach ([
+                [$borders->getTop(), $this->topBorderSize],
+                [$borders->getRight(), $this->rightBorderSize],
+                [$borders->getBottom(), $this->bottomBorderSize],
+                [$borders->getLeft(), $this->leftBorderSize],
+            ] as [$border, $size]) {
+                if ($size <= 0) {
+                    $border->setLineStyle(Border::LINE_NONE);
+                }
+            }
+        }
 
         return $borders;
     }
