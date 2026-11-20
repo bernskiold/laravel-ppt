@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-ppt` will be documented in this file.
 
+## 1.1.1 - 2026-11-20
+
+### What's Changed
+
+* Bump body-parser from 1.20.6 to 1.20.9 in /docs by @dependabot[bot] in https://github.com/bernskiold/laravel-ppt/pull/88
+* Bump postcss-selector-parser from 6.0.15 to 6.1.5 in /docs by @dependabot[bot] in https://github.com/bernskiold/laravel-ppt/pull/90
+* Bump node-forge from 1.3.2 to 1.4.3 in /docs by @dependabot[bot] in https://github.com/bernskiold/laravel-ppt/pull/91
+* Bump joi from 17.13.7 to 17.13.9 in /docs by @dependabot[bot] in https://github.com/bernskiold/laravel-ppt/pull/92
+* Add PHP 8.5 and 8.6 support and drop Laravel 11 by @ErikBernskiold in https://github.com/bernskiold/laravel-ppt/pull/94
+* Make PHP 8.6 a required part of the test matrix by @ErikBernskiold in https://github.com/bernskiold/laravel-ppt/pull/95
+
+**Full Changelog**: https://github.com/bernskiold/laravel-ppt/compare/1.1.0...1.1.1
+
 ## 1.1.0 - 2026-10-24
 
 ### Added
