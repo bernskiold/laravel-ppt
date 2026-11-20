@@ -9,8 +9,6 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-    # PHP 8.6 is pre-release; let it fail without failing the build.
-    continue-on-error: ${{ matrix.php == '8.6' }}
     strategy:
       fail-fast: true
       matrix:
@@ -31,9 +29,18 @@ jobs:
             testbench: 11.*
             stability: prefer-stable
             phppresentation: fork
+          - os: ubuntu-latest
+            php: 8.6
+            laravel: 13.*
+            testbench: 11.*
+            stability: prefer-stable
+            phppresentation: fork
         exclude:
           - laravel: 13.*
             php: 8.2
+          # Laravel 12 supports PHP 8.2 - 8.5 only.
+          - laravel: 12.*
+            php: 8.6
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }} - PHPPresentation ${{ matrix.phppresentation }}
 
